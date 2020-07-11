@@ -1,0 +1,16 @@
+.Queue {
+  width: 120px;
+  border: 1px solid black;
+  overflow: hidden;
+}
+
+.colorStripe {
+  width: 20px;
+  height: 30px;
+  float: left;
+  margin-right: 5px;
+}
+
+.name {
+  float: left;
+}
