@@ -1,28 +1,55 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+
 import QueueList from './QueueList';
+import QueueEdit from './QueueEdit';
 
 import '../styles/App.css';
 
-// TODO: remove static test content
-const SEED = [
-  {
-    name: 'TEST1',
-    color: '#74992e',
-    priority: 1,
-    id: 12345774212431232131,
-  },
-  {
-    name: 'TEST2',
-    color: '#4287f5',
-    priority: 2,
-    id: 12315636232112223123,
-  },
-];
-
 function App() {
+  const [queues, setQueues] = useState([]);
+  const [showQueueEdit, setShowQueueEdit] = useState(false);
+
+  const addQueue = (name, color) => {
+    const newQueues = queues.slice(0);
+
+    const newQueue = {
+      name,
+      color,
+      priority: queues.length,
+      id: uuidv4(),
+      completedTasks: [],
+      pendingTasks: [],
+    };
+
+    newQueues.push(newQueue);
+    setQueues(newQueues);
+  };
+
+  const onAddQueue = () => setShowQueueEdit(true);
+  const onCancel = () => setShowQueueEdit(false);
+
+  const onAccept = (name) => {
+    const color = '#4287f5'; // TODO: implement as parameter
+
+    addQueue(name, color);
+
+    setShowQueueEdit(false);
+  };
+
   return (
     <div className="App">
-      <QueueList queues={SEED} />
+      <QueueList
+        queues={queues}
+        onAddQueue={onAddQueue}
+        addButtonDisabled={showQueueEdit}
+      />
+      { showQueueEdit &&
+        <QueueEdit
+          onAccept={onAccept}
+          onClose={onCancel}
+        />
+      }
     </div>
   );
 }

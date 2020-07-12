@@ -1,18 +1,19 @@
 import React from 'react';
-
 import Queue from './Queue.js';
-import '../styles/gg-trash.css';
 
-function QueueList({ queues }) {
+import '../styles/QueueList.css';
+import '../styles/gg-trash.css';
+import '../styles/gg-pen.css';
+
+function QueueList({ queues, onAddQueue, addButtonDisabled }) {
   return (
-    <div>
+    <div className='QueueList'>
       {
         queues.map((queue) => (
           <Queue key={queue.id} {...queue}/>
         ))
       }
-      <span>&#43;</span>
-      <i class="gg-trash" style={{ marginLeft: '5px' }}></i>
+      <button className='addQueue' onClick={onAddQueue} disabled={addButtonDisabled}>&#43;</button>
     </div>
   );
 };

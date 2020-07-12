@@ -1,7 +1,7 @@
 .Queue {
-  width: 120px;
   border: 1px solid black;
   overflow: hidden;
+  margin-bottom: 5px;
 }
 
 .colorStripe {

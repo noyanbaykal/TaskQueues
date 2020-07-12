@@ -12,7 +12,9 @@
   inset 2px 0 0;
   border-bottom-left-radius: 1px;
   border-bottom-right-radius: 1px;
-  margin-top: 4px
+  margin-top: 4px;
+  margin-left: 4px;
+  margin-bottom: 4px;
  }
  
  .gg-trash::after,
