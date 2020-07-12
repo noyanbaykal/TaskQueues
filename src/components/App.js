@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import QueueList from './QueueList';
-import QueueEdit from './QueueEdit';
+import QueueModal from './QueueModal';
 
 import '../styles/App.css';
 
 function App() {
   const [queues, setQueues] = useState([]);
-  const [showQueueEdit, setShowQueueEdit] = useState(false);
+  const [showQueueModal, setShowQueueModal] = useState(false);
 
   const addQueue = (name, color) => {
     const newQueues = queues.slice(0);
@@ -16,7 +16,6 @@ function App() {
     const newQueue = {
       name,
       color,
-      priority: queues.length,
       id: uuidv4(),
       completedTasks: [],
       pendingTasks: [],
@@ -26,26 +25,37 @@ function App() {
     setQueues(newQueues);
   };
 
-  const onAddQueue = () => setShowQueueEdit(true);
-  const onCancel = () => setShowQueueEdit(false);
+  const onClickDeleteQueue = (e, id) => {
+    //e.target.disabled = true; // TODO: need the disable?
+    console.log(`delete e: ${e.target}, id: ${id}`);
+  };
 
+  const onClickEditQueue = (e, id) => {
+    console.log(`edit e: ${e.target}, id: ${id}`);
+  };
+
+  const onClickAddQueue = () => setShowQueueModal(true);
+  
+  const onCancel = () => setShowQueueModal(false);
   const onAccept = (name) => {
     const color = '#4287f5'; // TODO: implement as parameter
 
     addQueue(name, color);
 
-    setShowQueueEdit(false);
+    setShowQueueModal(false);
   };
 
   return (
     <div className="App">
       <QueueList
         queues={queues}
-        onAddQueue={onAddQueue}
-        addButtonDisabled={showQueueEdit}
+        addButtonDisabled={showQueueModal}
+        onClickAddQueue={onClickAddQueue}
+        onClickDeleteQueue={onClickDeleteQueue}
+        onClickEditQueue={onClickEditQueue}
       />
-      { showQueueEdit &&
-        <QueueEdit
+      { showQueueModal &&
+        <QueueModal
           onAccept={onAccept}
           onClose={onCancel}
         />

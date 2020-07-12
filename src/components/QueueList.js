@@ -2,18 +2,21 @@ import React from 'react';
 import Queue from './Queue.js';
 
 import '../styles/QueueList.css';
-import '../styles/gg-trash.css';
-import '../styles/gg-pen.css';
 
-function QueueList({ queues, onAddQueue, addButtonDisabled }) {
+function QueueList({ queues, addButtonDisabled, onClickAddQueue, onClickDeleteQueue, onClickEditQueue }) {
   return (
     <div className='QueueList'>
       {
         queues.map((queue) => (
-          <Queue key={queue.id} {...queue}/>
+          <Queue
+            key={queue.id}
+            queue={queue}
+            onClickDeleteQueue={onClickDeleteQueue}
+            onClickEditQueue={onClickEditQueue}
+          />
         ))
       }
-      <button className='addQueue' onClick={onAddQueue} disabled={addButtonDisabled}>&#43;</button>
+      <button className='addQueue' onClick={onClickAddQueue} disabled={addButtonDisabled}>&#43;</button>
     </div>
   );
 };

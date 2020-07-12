@@ -1,22 +1,17 @@
 import React, { useState } from 'react';
 
-import '../styles/QueueEdit.css';
+import '../styles/QueueModal.css';
 
-/*
-<i className="gg-trash"></i>
-<i className="gg-pen"></i>
-*/
+const INPUT_FIELD_INFO_NAME = 'Enter category name';
 
-const PLACEHOLDER_NAME = 'Enter category name';
-
-function QueueEdit({ onAccept, onClose }) {
+function QueueModal({ onAccept, onClose }) {
   const [name, setName] = useState('');
 
   // TODO: need input checks!
 
   return (
     <div>
-      <label>{PLACEHOLDER_NAME}</label>
+      <label>{INPUT_FIELD_INFO_NAME}</label>
       <input
         type='text'
         value={name}
@@ -28,4 +23,4 @@ function QueueEdit({ onAccept, onClose }) {
   );
 };
 
-export default QueueEdit;
+export default QueueModal;
