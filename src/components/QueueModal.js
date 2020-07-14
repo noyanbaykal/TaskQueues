@@ -4,10 +4,8 @@ import '../styles/QueueModal.css';
 
 const INPUT_FIELD_INFO_NAME = 'Enter category name';
 
-function QueueModal({ onAccept, onClose }) {
-  const [name, setName] = useState('');
-
-  // TODO: need input checks!
+function QueueModal({ selectedQueue = {}, onAccept, onClose }) {
+  const [name, setName] = useState(selectedQueue.name || '');
 
   return (
     <div>

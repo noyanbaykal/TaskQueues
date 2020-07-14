@@ -13,7 +13,7 @@ function App() {
   const [queues, setQueues] = useState([]);
   const [showQueueModal, setShowQueueModal] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const deleteRef = useRef();
+  const selectedQueueRef = useRef();
 
   const addQueue = (name, color) => {
     const newQueues = queues.slice(0);
@@ -32,11 +32,11 @@ function App() {
     // TODO: update backend/client
   };
 
-  const onClickDeleteQueue = (e, id) => {
+  const onClickDeleteQueue = (event, id) => {
     const idMatch = queues.filter(queue => queue.id === id);
     if(idMatch.length > 0) {
       const queueToDelete = idMatch[0];
-      deleteRef.current = queueToDelete;
+      selectedQueueRef.current = queueToDelete;
 
       setShowConfirmationModal(true);
     }
@@ -46,29 +46,47 @@ function App() {
     setShowConfirmationModal(false);
 
     if(actionConfirmed) {
-      const newQueues = queues.filter(queue => queue.id !== deleteRef.current.id);
+      const newQueues = queues.filter(queue => queue.id !== selectedQueueRef.current.id);
       setQueues(newQueues);
 
       // TODO: update backend/client
     }
 
-    deleteRef.current = null;
+    selectedQueueRef.current = undefined;
   };
 
-  const onClickEditQueue = (e, id) => {
-    console.log(`edit e: ${e.target}, id: ${id}`);
+  const onClickEditQueue = (event, id) => {
+    const idMatch = queues.filter(queue => queue.id === id);
+    if(idMatch.length > 0) {
+      const queueToEdit = idMatch[0];
+      selectedQueueRef.current = queueToEdit;
+
+      setShowQueueModal(true);
+    }
   };
 
   const onClickAddQueue = () => setShowQueueModal(true);
   
-  const onCancelQueueModal = () => setShowQueueModal(false);
-  const onAcceptQueueModal = (name) => {
-    const color = '#4287f5'; // TODO: implement as parameter
+  const onCancelQueueModal = () => {
+    selectedQueueRef.current = undefined;
+    setShowQueueModal(false);
+  };
 
-    addQueue(name, color);
-    // TODO: add edit functionality!!
+  const onAcceptQueueModal = (name) => {
+    if (selectedQueueRef.current) {
+      selectedQueueRef.current.name = name;
+
+      // TODO:implement updating color
+
+      selectedQueueRef.current = undefined;
+    } else {
+      const color = '#4287f5'; // TODO: implement as parameter
+      addQueue(name, color);
+    }
 
     setShowQueueModal(false);
+
+    // TODO: update backend/client
   };
 
   return (
@@ -82,13 +100,14 @@ function App() {
       />
       { showConfirmationModal &&
         <ConfirmationModal
-          prompt={DELETE_CONFIRMATION(deleteRef.current.name)}
+          prompt={DELETE_CONFIRMATION(selectedQueueRef.current.name)}
           onConfirm={() => deleteQueueAction(true)}
           onCancel={() => deleteQueueAction(false)}
         />
       }
       { showQueueModal &&
         <QueueModal
+          selectedQueue={selectedQueueRef.current}
           onAccept={onAcceptQueueModal}
           onClose={onCancelQueueModal}
         />
