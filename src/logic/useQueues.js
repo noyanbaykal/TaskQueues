@@ -61,26 +61,22 @@ function useQueues() {
 
   const onClickAddQueue = () => setShowQueueModal(true);
 
-  const actionCancelQueueModal = () => {
-    selectedQueueRef.current = undefined;
-    setShowQueueModal(false);
-  };
+  const actionQueueModal = (name) => {
+    if(name !== undefined) { // Not cancelled
+      if (selectedQueueRef.current) { // Edited
+        selectedQueueRef.current.name = name;
 
-  const actionAcceptQueueModal = (name) => {
-    if (selectedQueueRef.current) {
-      selectedQueueRef.current.name = name;
+        // TODO:implement updating color
+      } else { // Created
+        const color = '#4287f5'; // TODO: implement as parameter
+        addQueue(name, color);
+      }
 
-      // TODO:implement updating color
-
-      selectedQueueRef.current = undefined;
-    } else {
-      const color = '#4287f5'; // TODO: implement as parameter
-      addQueue(name, color);
+      // TODO: update backend/client
     }
 
+    selectedQueueRef.current = undefined;
     setShowQueueModal(false);
-
-    // TODO: update backend/client
   };
 
   return {
@@ -92,8 +88,7 @@ function useQueues() {
     onClickAddQueue,
     onClickEditQueue,
     onClickDeleteQueue,
-    actionAcceptQueueModal,
-    actionCancelQueueModal,
+    actionQueueModal,
     actionDeleteQueue,
   };
 };

@@ -3,7 +3,7 @@ import Queue from './Queue.js';
 
 import '../styles/QueueList.css';
 
-function QueueList({ queues, addButtonDisabled, onClickAddQueue, onClickDeleteQueue, onClickEditQueue }) {
+function QueueList({ queues, addButtonDisabled, onClickAddQueue, onClickEditQueue, onClickDeleteQueue }) {
   return (
     <div className='QueueList'>
       {

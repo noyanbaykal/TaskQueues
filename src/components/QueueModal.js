@@ -4,7 +4,7 @@ import '../styles/QueueModal.css';
 
 const INPUT_FIELD_INFO_NAME = 'Enter category name';
 
-function QueueModal({ selectedQueue = {}, onAccept, onClose }) {
+function QueueModal({ selectedQueue = {}, onConfirm, onCancel }) {
   const [name, setName] = useState(selectedQueue.name || '');
 
   return (
@@ -15,8 +15,8 @@ function QueueModal({ selectedQueue = {}, onAccept, onClose }) {
         value={name}
         onChange={event => setName(event.target.value)}
       />
-      <button onClick={() => onAccept(name)}>&#10003;</button>
-      <button onClick={onClose}>&#10006;</button>
+      <button onClick={() => onConfirm(name)}>&#10003;</button>
+      <button onClick={onCancel}>&#10006;</button>
     </div>
   );
 };

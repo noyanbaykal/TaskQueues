@@ -18,8 +18,7 @@ function Display() {
     onClickAddQueue,
     onClickEditQueue,
     onClickDeleteQueue,
-    actionAcceptQueueModal,
-    actionCancelQueueModal,
+    actionQueueModal,
     actionDeleteQueue,
   } = useQueues();
 
@@ -29,8 +28,8 @@ function Display() {
         queues={queues}
         addButtonDisabled={showQueueModal}
         onClickAddQueue={onClickAddQueue}
-        onClickDeleteQueue={onClickDeleteQueue}
         onClickEditQueue={onClickEditQueue}
+        onClickDeleteQueue={onClickDeleteQueue}
       />
       { showConfirmationModal &&
         <ConfirmationModal
@@ -42,8 +41,8 @@ function Display() {
       { showQueueModal &&
         <QueueModal
           selectedQueue={selectedQueueRef.current}
-          onAccept={actionAcceptQueueModal}
-          onClose={actionCancelQueueModal}
+          onConfirm={(name) => actionQueueModal(name)}
+          onCancel={() => actionQueueModal()}
         />
       }
     </div>
