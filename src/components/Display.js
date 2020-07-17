@@ -3,6 +3,7 @@ import React from 'react';
 import QueueList from './QueueList';
 import QueueModal from './QueueModal';
 import ConfirmationModal from './ConfirmationModal';
+import TaskList from './TaskList';
 
 import useQueues from '../logic/useQueues.js';
 
@@ -44,6 +45,10 @@ function Display() {
           onConfirm={(name) => actionQueueModal(name)}
           onCancel={() => actionQueueModal()}
         />
+      }
+      {
+        !showConfirmationModal && !showQueueModal &&
+          <TaskList />
       }
     </div>
   );

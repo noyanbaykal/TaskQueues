@@ -4,10 +4,12 @@ import { v4 as uuidv4 } from 'uuid';
 function useQueues() {
   const DELETE_CONFIRMATION = (name) => `Are you sure you want to delete the Queue: ${name}?`;
 
+  const selectedQueueRef = useRef();
+  
   const [queues, setQueues] = useState([]);
   const [showQueueModal, setShowQueueModal] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const selectedQueueRef = useRef();
+  
 
   const addQueue = (name, color) => {
     const newQueues = queues.slice(0);
