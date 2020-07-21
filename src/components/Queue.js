@@ -7,6 +7,8 @@ import '../styles/gg-pen.css';
 function Queue({ queue, onClickDeleteQueue, onClickEditQueue }) {
   const { name, color, id } = queue;
 
+  // TODO: display pending task count!
+
   return (
     <div className='Queue'>
       <div className='colorStripe' style={{ backgroundColor: color }}/>

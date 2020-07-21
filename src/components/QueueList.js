@@ -11,8 +11,8 @@ function QueueList({ queues, addButtonDisabled, onClickAddQueue, onClickEditQueu
           <Queue
             key={queue.id}
             queue={queue}
-            onClickDeleteQueue={onClickDeleteQueue}
             onClickEditQueue={onClickEditQueue}
+            onClickDeleteQueue={onClickDeleteQueue}
           />
         ))
       }

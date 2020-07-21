@@ -48,7 +48,9 @@ function Display() {
       }
       {
         !showConfirmationModal && !showQueueModal &&
-          <TaskList />
+          <TaskList
+            queues={queues}
+          />
       }
     </div>
   );

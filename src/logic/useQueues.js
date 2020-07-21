@@ -27,8 +27,6 @@ function useQueues() {
   };
 
   const actionDeleteQueue = (actionConfirmed) => {
-    setShowConfirmationModal(false);
-
     if(actionConfirmed) {
       const newQueues = queues.filter(queue => queue.id !== selectedQueueRef.current.id);
       
@@ -37,6 +35,7 @@ function useQueues() {
     }
 
     selectedQueueRef.current = undefined;
+    setShowConfirmationModal(false);
   };
 
   const onClickEditQueue = (event, id) => {
