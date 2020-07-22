@@ -13,6 +13,7 @@ function Display() {
   const {
     DELETE_CONFIRMATION,
     queues,
+    setQueues,
     selectedQueueRef,
     showQueueModal,
     showConfirmationModal,
@@ -50,6 +51,7 @@ function Display() {
         !showConfirmationModal && !showQueueModal &&
           <TaskList
             queues={queues}
+            setQueues={setQueues}
           />
       }
     </div>

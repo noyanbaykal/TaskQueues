@@ -87,6 +87,7 @@ function useQueues() {
   return {
     DELETE_CONFIRMATION,
     queues,
+    setQueues,
     selectedQueueRef,
     showQueueModal,
     showConfirmationModal,

@@ -11,7 +11,7 @@ import TaskModal from './TaskModal.js';
 const NO_TASKS = 'You have no pending tasks!';
 const NO_QUEUES = 'Create a queue before adding tasks!';
 
-function TaskList({ queues }) {
+function TaskList({ queues, setQueues }) {
   const {
     DELETE_CONFIRMATION,
     showConfirmationModal,
@@ -22,8 +22,9 @@ function TaskList({ queues }) {
     onClickDeleteTask,
     actionTaskModal,
     actionDeleteTask,
+    actionCompleteTask,
     getTopTasks,
-  } = useTasks(queues);
+  } = useTasks(queues, setQueues);
 
   const topTasks = getTopTasks();
 
@@ -42,6 +43,7 @@ function TaskList({ queues }) {
                   task={task}
                   onClickEditTask={onClickEditTask}
                   onClickDeleteTask={onClickDeleteTask}
+                  actionCompleteTask={actionCompleteTask}
                 />
               ))
             }
