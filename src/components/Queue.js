@@ -4,6 +4,8 @@ import '../styles/Queue.css';
 import '../styles/gg-trash.css';
 import '../styles/gg-pen.css';
 
+//<button className='addQueue' onClick={onClickAddQueue} disabled={showQueueModal}>&#43;</button>
+
 function Queue({ queue, onClickDeleteQueue, onClickEditQueue }) {
   const { name, color, id } = queue;
 

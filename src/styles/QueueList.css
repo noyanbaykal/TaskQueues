@@ -1,4 +1,6 @@
 .QueueList {
   width: 120px;
   margin-left: 5px;
+  text-align: center;
+  display: flex;
 }

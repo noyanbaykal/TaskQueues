@@ -1,13 +1,13 @@
 import React from 'react';
 
-import Display from './Display';
+import QueueList from './QueueList';
 
 import '../styles/App.css';
 
 function App() {
   return (
     <div className='App'>
-      <Display />
+      <QueueList />
     </div>
   );
 }
