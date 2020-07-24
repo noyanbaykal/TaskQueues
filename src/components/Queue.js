@@ -23,6 +23,9 @@ const DELETE_CONFIRMATION = (name) => `Are you sure you want to delete the Queue
 function Queue({ queue, handleCreate, handleEdit, handleDelete }) {
   const [displayMode, setDisplayMode] = useState(SHOULD_DISPLAY(queue));
 
+  const {id, name, color, pendingTasks} = queue || {};
+  const taskCount = (pendingTasks || []).length;
+
   const onClickCreateOrEdit = () => {
     setDisplayMode(DISPLAY_MODES.EDIT_QUEUE);
   };
@@ -35,18 +38,15 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete }) {
     setDisplayMode(SHOULD_DISPLAY(queue));
   }
 
-  const onModalConfirm = (name, queueId) => {
-    if(queueId) {
-      handleEdit(queueId, name);
+  const onModalConfirm = (name) => {
+    setDisplayMode(SHOULD_DISPLAY(queue));
+    
+    if(id) {
+      handleEdit(id, name);
     } else {
       handleCreate(name);
     }
-
-    setDisplayMode(SHOULD_DISPLAY(queue));
   };
-
-  const {id, name, color, pendingTasks} = queue || {};
-  const taskCount = (pendingTasks || []).length;
 
   return (
     <div className='Queue'>

@@ -16,7 +16,7 @@ function QueueModal({ queue = {}, onConfirm, onCancel }) {
         value={name}
         onChange={event => setName(event.target.value)}
       />
-      <button onClick={() => onConfirm(name, queue.id)}>&#10003;</button>
+      <button onClick={() => onConfirm(name)}>&#10003;</button>
       <button onClick={onCancel}>&#10006;</button>
     </div>
   );

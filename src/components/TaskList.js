@@ -1,81 +1,66 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Task from './Task';
-import ConfirmationModal from './ConfirmationModal';
-
-import useTasks from '../logic/useTasks.js';
 
 import '../styles/TaskList.css';
-import TaskModal from './TaskModal.js';
 
 const NO_TASKS = 'You have no pending tasks!';
-const NO_QUEUES = 'Create a queue before adding tasks!';
 
-function TaskList({ queues, setQueues }) {
-  const {
-    DELETE_CONFIRMATION,
-    showConfirmationModal,
-    showTaskModal,
-    selectedTaskInfo,
-    onClickAddTask,
-    onClickEditTask,
-    onClickDeleteTask,
-    actionTaskModal,
-    actionDeleteTask,
-    actionCompleteTask,
-    getTopTasks,
-  } = useTasks(queues, setQueues);
-
-  const topTasks = getTopTasks();
-
-  // TODO: key for tasks should have task index appended!
-
+function TaskList({ taskInfos, queueDropdownOptions, actionCreateTask, actionEditTask, actionDeleteTask, actionCompleteTask }) {
   return (
     <div className='TaskList'>
-      { topTasks.length < 1
+      { 
+        taskInfos.length < 1
         ? <div>{NO_TASKS}</div>
         : (
           <div>
             {
-              topTasks.map((task) => (
+              taskInfos.map((taskInfo) => (
                 <Task
-                  key={`${task.queueId}`}
-                  task={task}
-                  onClickEditTask={onClickEditTask}
-                  onClickDeleteTask={onClickDeleteTask}
-                  actionCompleteTask={actionCompleteTask}
+                  key={`${taskInfo.id}`}
+                  taskInfo={taskInfo}
+                  queueDropdownOptions={queueDropdownOptions}
+                  handleCreate={actionCreateTask}
+                  handleEdit={actionEditTask}
+                  handleDelete={actionDeleteTask}
+                  handleComplete={actionCompleteTask}
                 />
               ))
             }
           </div>
-        )
-      }
-      { showConfirmationModal &&
-          <ConfirmationModal
-            prompt={DELETE_CONFIRMATION(selectedTaskInfo.text, selectedTaskInfo.queue.name)}
-            onConfirm={() => actionDeleteTask(true)}
-            onCancel={() => actionDeleteTask(false)}
-          />
-      }
-      { showTaskModal &&
-        <TaskModal
-          queueOptions={queues.map(({ name, id }) => ({ name, id }))}
-          selectedTaskInfo={selectedTaskInfo}
-          onConfirm={actionTaskModal}
-          onCancel={() => actionTaskModal()}
-        />
-      }
-      { !showConfirmationModal && !showTaskModal &&
-        (
-          queues.length < 1
-          ? <div>{NO_QUEUES}</div>
-          : (
-            <button className='addTask' onClick={onClickAddTask}>&#43;</button>
           )
-        )
       }
+      <Task
+        queueDropdownOptions={queueDropdownOptions}
+        handleCreate={actionCreateTask}
+        handleEdit={actionEditTask}
+        handleDelete={actionDeleteTask}
+        handleComplete={actionCompleteTask}
+      />
     </div>
   );
+};
+
+TaskList.propTypes = {
+  taskInfos: PropTypes.arrayOf(
+    PropTypes.shape({
+      queueName: PropTypes.string.isRequired,
+      queueId: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
+      index: PropTypes.number.isRequired,
+      color: PropTypes.string.isRequired,
+      text: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  queueDropdownOptions: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+  })).isRequired,
+  actionCreateTask: PropTypes.func.isRequired,
+  actionEditTask: PropTypes.func.isRequired,
+  actionDeleteTask: PropTypes.func.isRequired,
+  actionCompleteTask: PropTypes.func.isRequired,
 };
 
 export default TaskList;

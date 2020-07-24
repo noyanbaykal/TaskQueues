@@ -7,12 +7,20 @@ import '../styles/QueueList.css';
 
 import useQueues from '../logic/useQueues.js';
 
+const NO_QUEUES = 'Create a queue before adding tasks!';
+
 function QueueList() {
   const {
     queues,
+    getTaskInfos,
+    getQueueDropdownOptions,
     actionCreateQueue,
     actionEditQueue,
     actionDeleteQueue,
+    actionCreateTask,
+    actionEditTask,
+    actionDeleteTask,
+    actionCompleteTask,
   } = useQueues();
 
   return (
@@ -36,6 +44,18 @@ function QueueList() {
           />
         </div>
         <div className='mainPanel'>
+          {
+            queues.length < 1
+            ? <div>{NO_QUEUES}</div>
+            : <TaskList
+                taskInfos={getTaskInfos()}
+                queueDropdownOptions={getQueueDropdownOptions()}
+                actionCreateTask={actionCreateTask}
+                actionEditTask={actionEditTask}
+                actionDeleteTask={actionDeleteTask}
+                actionCompleteTask={actionCompleteTask}
+              />
+          }
         </div>
     </div>
   );
