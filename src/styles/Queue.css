@@ -2,7 +2,6 @@
   border: 1px solid black;
   overflow: hidden;
   margin-bottom: 5px;
-  width: 200px;
 }
 
 .colorStripe {
@@ -12,7 +11,7 @@
   margin-right: 5px;
 }
 
-.name {
+.queueName {
   float: left;
 }
 
@@ -21,6 +20,6 @@
   margin-left: 10px;
 }
 
-.buttons {
+.queueButtons {
   float: right;
 }

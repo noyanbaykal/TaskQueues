@@ -1,6 +1,15 @@
 .QueueList {
-  width: 120px;
-  margin-left: 5px;
-  text-align: center;
+  width: 100%;
+  text-align: left;
   display: flex;
+}
+
+.queueBar {
+  min-width: 15%;
+  max-width: 30%;
+  padding-right: 15px;
+}
+
+.mainPanel {
+  width: 100%;
 }

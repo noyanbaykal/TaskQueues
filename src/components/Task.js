@@ -4,10 +4,12 @@ import PropTypes from 'prop-types';
 import ConfirmationModal from './ConfirmationModal';
 import TaskModal from './TaskModal.js';
 
+import deleteIcon from '../icons/trash.svg';
+import editIcon from '../icons/edit.svg';
+import completeIcon from '../icons/check-square.svg';
 import '../styles/Task.css';
-import '../styles/gg-check.css';
-import '../styles/gg-pen.css';
-import '../styles/gg-trash.css';
+
+const ICON_SIZE = '16px';
 
 const DISPLAY_MODES = Object.freeze({
   NO_TASK: 1,
@@ -80,18 +82,20 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
           ,[DISPLAY_MODES.DISPLAY_TASK]:
           <>
             <div className='colorStripe' style={{ backgroundColor: color }}/>
-            <div>
+            <div className='taskText'>
               {text}
             </div>
-            <button onClick={onClickDelete}>
-              <i className="gg-trash"></i>
-            </button>
-            <button onClick={onClickCreateOrEdit}>
-              <i className="gg-pen"></i>
-            </button>
-            <button onClick={onClickComplete}>
-              <i className="gg-check"></i>
-            </button>
+            <div className='taskButtons'>
+              <button onClick={onClickDelete}>
+                <img src={deleteIcon} width={ICON_SIZE} height={ICON_SIZE} alt='deleteIcon' />
+              </button>
+              <button onClick={onClickCreateOrEdit}>
+              <img src={editIcon} width={ICON_SIZE} height={ICON_SIZE} alt='editIcon' />
+              </button>
+              <button onClick={onClickComplete}>
+              <img src={completeIcon} width={ICON_SIZE} height={ICON_SIZE} alt='completeIcon' />
+              </button>
+            </div>
           </>
           ,[DISPLAY_MODES.NEED_CONFIRMATION]:
             <ConfirmationModal

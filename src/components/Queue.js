@@ -4,9 +4,11 @@ import PropTypes from 'prop-types';
 import QueueModal from './QueueModal';
 import ConfirmationModal from './ConfirmationModal';
 
+import deleteIcon from '../icons/trash.svg';
+import editIcon from '../icons/edit.svg';
 import '../styles/Queue.css';
-import '../styles/gg-trash.css';
-import '../styles/gg-pen.css';
+
+const ICON_SIZE = '16px';
 
 const DISPLAY_MODES = Object.freeze({
   NO_QUEUE: 1,
@@ -63,18 +65,18 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete }) {
           ,[DISPLAY_MODES.DISPLAY_QUEUE]:
             <>
               <div className='colorStripe' style={{ backgroundColor: color }}/>
-              <div className='name'>
+              <div className='queueName'>
                 {name}
               </div>
               <div className='taskCount'>
                 {taskCount > 0 ? taskCount : null}
               </div>
-              <div className='buttons'>
+              <div className='queueButtons'>
                 <button className='deleteButton' onClick={onClickDelete}>
-                  <i className="gg-trash"></i>
+                  <img src={deleteIcon} width={ICON_SIZE} height={ICON_SIZE} alt='deleteIcon' />
                 </button>
                 <button className='editButton' onClick={onClickCreateOrEdit}>
-                  <i className="gg-pen"></i>
+                  <img src={editIcon} width={ICON_SIZE} height={ICON_SIZE} alt='editIcon' />
                 </button>
               </div>
             </>

@@ -25,38 +25,38 @@ function QueueList() {
 
   return (
     <div className='QueueList'>
-        <div className='QueueBar'>
-          {
-            queues.map((queue) => (
-              <Queue
-                key={queue.id}
-                queue={queue}
-                handleCreate={actionCreateQueue}
-                handleEdit={actionEditQueue}
-                handleDelete={actionDeleteQueue}
-              />
-            ))
-          }
-          <Queue
-            handleCreate={actionCreateQueue}
-            handleEdit={actionEditQueue}
-            handleDelete={actionDeleteQueue}
-          />
-        </div>
-        <div className='mainPanel'>
-          {
-            queues.length < 1
-            ? <div>{NO_QUEUES}</div>
-            : <TaskList
-                taskInfos={getTaskInfos()}
-                queueDropdownOptions={getQueueDropdownOptions()}
-                actionCreateTask={actionCreateTask}
-                actionEditTask={actionEditTask}
-                actionDeleteTask={actionDeleteTask}
-                actionCompleteTask={actionCompleteTask}
-              />
-          }
-        </div>
+      <div className='queueBar'>
+        {
+          queues.map((queue) => (
+            <Queue
+              key={queue.id}
+              queue={queue}
+              handleCreate={actionCreateQueue}
+              handleEdit={actionEditQueue}
+              handleDelete={actionDeleteQueue}
+            />
+          ))
+        }
+        <Queue
+          handleCreate={actionCreateQueue}
+          handleEdit={actionEditQueue}
+          handleDelete={actionDeleteQueue}
+        />
+      </div>
+      <div className='mainPanel'>
+        {
+          queues.length < 1
+          ? <div>{NO_QUEUES}</div>
+          : <TaskList
+              taskInfos={getTaskInfos()}
+              queueDropdownOptions={getQueueDropdownOptions()}
+              actionCreateTask={actionCreateTask}
+              actionEditTask={actionEditTask}
+              actionDeleteTask={actionDeleteTask}
+              actionCompleteTask={actionCompleteTask}
+            />
+        }
+      </div>
     </div>
   );
 };

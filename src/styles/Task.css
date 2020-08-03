@@ -1,0 +1,14 @@
+.Task {
+  min-width: 200px;
+  min-height: 40px;
+}
+
+.taskText {
+  display: inline;
+  padding-right: 15px;
+}
+
+.taskButtons {
+  display: inline;
+}
+
