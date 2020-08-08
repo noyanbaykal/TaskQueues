@@ -55,9 +55,7 @@ function useQueues() {
     );
   };
 
-  const actionCreateQueue = (name) => {
-    const color = '#4287f5'; // TODO: implement as parameter
-
+  const actionCreateQueue = ({ name, color }) => {
     const newQueue = {
       name,
       color,
@@ -70,13 +68,12 @@ function useQueues() {
     updateQueues(newQueues);
   };
 
-  const actionEditQueue = (queueId, newName) => {
-    // TODO: implement color editing
-
+  const actionEditQueue = ({ id, name, color }) => {
     const newQueues = [...queues];
     for(let i = 0; i < newQueues.length; i++) {
-      if(newQueues[i].id === queueId) {
-        newQueues[i].name = newName;
+      if(newQueues[i].id === id) {
+        newQueues[i].name = name;
+        newQueues[i].color = color;
         break;
       }
     }

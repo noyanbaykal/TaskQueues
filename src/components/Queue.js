@@ -8,13 +8,13 @@ import deleteIcon from '../icons/trash.svg';
 import editIcon from '../icons/edit.svg';
 import '../styles/Queue.css';
 
-const ICON_SIZE = '16px';
+const ICON_SIZE = '14px';
 
 const DISPLAY_MODES = Object.freeze({
-  NO_QUEUE: 1,
-  EDIT_QUEUE: 2,
-  DISPLAY_QUEUE: 3,
-  NEED_CONFIRMATION: 4,
+  NO_QUEUE: 'noQueue',
+  EDIT_QUEUE: 'editQueue',
+  DISPLAY_QUEUE: 'Queue',
+  NEED_CONFIRMATION: 'confirmQueue',
 });
 
 const SHOULD_DISPLAY = (queue) => queue ? DISPLAY_MODES.DISPLAY_QUEUE : DISPLAY_MODES.NO_QUEUE;
@@ -40,18 +40,23 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete }) {
     setDisplayMode(SHOULD_DISPLAY(queue));
   }
 
-  const onModalConfirm = (name) => {
+  const onModalConfirm = (changes) => {
+    if(!changes.name || !changes.color) {
+      return;
+    }
+
     setDisplayMode(SHOULD_DISPLAY(queue));
     
     if(id) {
-      handleEdit(id, name);
+      changes.id = id;
+      handleEdit(changes);
     } else {
-      handleCreate(name);
+      handleCreate(changes);
     }
   };
 
   return (
-    <div className='Queue'>
+    <div className={displayMode}>
       {
         {
           [DISPLAY_MODES.NO_QUEUE]:

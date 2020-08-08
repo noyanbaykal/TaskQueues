@@ -1,0 +1,14 @@
+.QueueModal {
+  display: flex;
+  flex-direction: column;
+}
+
+.QueueModal input {
+  margin-top: 2px;
+  margin-bottom: 5px;
+}
+
+.QueueModal button {
+  width: 30%;
+  align-self: center;
+}

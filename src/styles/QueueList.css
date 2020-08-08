@@ -4,12 +4,27 @@
   display: flex;
 }
 
-.queueBar {
+.QueueList .queueBar {
   min-width: 15%;
   max-width: 30%;
   padding-right: 15px;
 }
 
-.mainPanel {
+.QueueList .queueBar>* {
+  height: 4em; /* Specify height here so the parent will contain all children */
+}
+
+.QueueList .queueBar .noQueue{
+  margin: 0 auto;
+  width: 15%;
+  height: 30%;
+}
+
+.QueueList .queueBar .noQueue .createQueue{
+  margin-top: 4px;
+  margin-left: 2px;
+}
+
+.QueueList .mainPanel {
   width: 100%;
 }
