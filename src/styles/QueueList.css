@@ -10,10 +10,6 @@
   padding-right: 15px;
 }
 
-.QueueList .queueBar>* {
-  height: 4em; /* Specify height here so the parent will contain all children */
-}
-
 .QueueList .queueBar .noQueue{
   margin: 0 auto;
   width: 15%;

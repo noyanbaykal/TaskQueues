@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Button, Card, Icon } from 'semantic-ui-react';
 
 import QueueModal from './QueueModal';
 import ConfirmationModal from './ConfirmationModal';
-
-import deleteIcon from '../icons/trash.svg';
-import editIcon from '../icons/edit.svg';
-import '../styles/Queue.css';
-
-const ICON_SIZE = '14px';
 
 const DISPLAY_MODES = Object.freeze({
   NO_QUEUE: 'noQueue',
@@ -32,13 +27,17 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete }) {
     setDisplayMode(DISPLAY_MODES.EDIT_QUEUE);
   };
 
+  const onClickView = () => {
+    // TODO
+  };
+
   const onClickDelete = () => {
     setDisplayMode(DISPLAY_MODES.NEED_CONFIRMATION);
   };
 
   const onClickCancel = () => {
     setDisplayMode(SHOULD_DISPLAY(queue));
-  }
+  };
 
   const onModalConfirm = (changes) => {
     if(!changes.name || !changes.color) {
@@ -60,7 +59,9 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete }) {
       {
         {
           [DISPLAY_MODES.NO_QUEUE]:
-            <button className='createQueue' onClick={onClickCreateOrEdit}>&#43;</button>
+            <Button icon onClick={onClickCreateOrEdit}>
+              <Icon name='plus circle' />
+            </Button>
           ,[DISPLAY_MODES.EDIT_QUEUE]:
             <QueueModal
               queue={queue}
@@ -69,21 +70,30 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete }) {
             />
           ,[DISPLAY_MODES.DISPLAY_QUEUE]:
             <>
-              <div className='colorStripe' style={{ backgroundColor: color }}/>
-              <div className='queueName'>
-                {name}
-              </div>
-              <div className='taskCount'>
-                {taskCount > 0 ? taskCount : null}
-              </div>
-              <div className='queueButtons'>
-                <button className='deleteButton' onClick={onClickDelete}>
-                  <img src={deleteIcon} width={ICON_SIZE} height={ICON_SIZE} alt='deleteIcon' />
-                </button>
-                <button className='editButton' onClick={onClickCreateOrEdit}>
-                  <img src={editIcon} width={ICON_SIZE} height={ICON_SIZE} alt='editIcon' />
-                </button>
-              </div>
+              <Card style={{ marginBottom: '1.2em' }}>
+                <div className='ui tiny label' style={{ backgroundColor: color }}/>
+                <Card.Content>
+                  <Card.Header textAlign='center'>
+                    {name}
+                  </Card.Header>
+                </Card.Content>
+                <Card.Content extra>
+                  <div className='left floated' onClick={onClickCreateOrEdit} style={{ marginRight: '0.65em' }}>
+                    <i className='large edit icon' />
+                  </div>
+                  <div className='left floated' onClick={onClickView}>
+                    <i className='large eye icon'/>
+                  </div>
+                  <div className='right floated' onClick={onClickDelete}>
+                    <i className='large trash icon' />
+                  </div>
+                  { taskCount > 0 &&
+                    <div className='ui right floated circular label' style={{ marginRight: '0.65em' }}>
+                      {taskCount}
+                    </div>
+                  }
+                </Card.Content>
+              </Card>
             </>
           ,[DISPLAY_MODES.NEED_CONFIRMATION]:
             <ConfirmationModal

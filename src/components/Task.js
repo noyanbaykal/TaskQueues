@@ -1,15 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Button, Icon } from 'semantic-ui-react';
 
 import ConfirmationModal from './ConfirmationModal';
 import TaskModal from './TaskModal.js';
 
-import deleteIcon from '../icons/trash.svg';
-import editIcon from '../icons/edit.svg';
-import completeIcon from '../icons/check-square.svg';
 import '../styles/Task.css';
-
-const ICON_SIZE = '16px';
 
 const DISPLAY_MODES = Object.freeze({
   NO_TASK: 1,
@@ -71,7 +67,9 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
       {
         {
           [DISPLAY_MODES.NO_TASK]:
-            <button className='addTask' onClick={onClickCreateOrEdit}>&#43;</button>
+            <Button icon onClick={onClickCreateOrEdit}>
+              <Icon name='plus circle' />
+            </Button>
           ,[DISPLAY_MODES.EDIT_TASK]:
             <TaskModal
               taskInfo={taskInfo}
@@ -86,15 +84,15 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
               {text}
             </div>
             <div className='taskButtons'>
-              <button onClick={onClickDelete}>
-                <img src={deleteIcon} width={ICON_SIZE} height={ICON_SIZE} alt='deleteIcon' />
-              </button>
-              <button onClick={onClickCreateOrEdit}>
-              <img src={editIcon} width={ICON_SIZE} height={ICON_SIZE} alt='editIcon' />
-              </button>
-              <button onClick={onClickComplete}>
-              <img src={completeIcon} width={ICON_SIZE} height={ICON_SIZE} alt='completeIcon' />
-              </button>
+              <Button icon onClick={onClickDelete}>
+                  <Icon name='trash' />
+              </Button>
+              <Button icon onClick={onClickCreateOrEdit}>
+                <Icon name='pencil alternate' />
+              </Button>
+              <Button icon onClick={onClickComplete}>
+                <Icon name='check square outline' />
+              </Button>
             </div>
           </>
           ,[DISPLAY_MODES.NEED_CONFIRMATION]:

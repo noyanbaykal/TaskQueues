@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Button, Icon } from 'semantic-ui-react';
 
 import '../styles/TaskModal.css';
 
@@ -40,8 +41,12 @@ function TaskModal({ taskInfo = {}, queueDropdownOptions, onConfirm, onCancel })
         value={text}
         onChange={onChangeText}
       />
-      <button onClick={() => onConfirm(queueId, text)}>&#10003;</button>
-      <button onClick={onCancel}>&#10006;</button>
+      <Button icon onClick={() => onConfirm(queueId, text)}>
+        <Icon name='check' />
+      </Button>
+      <Button icon onClick={onCancel}>
+        <Icon name='delete' />
+      </Button>
     </div>
   );
 };
