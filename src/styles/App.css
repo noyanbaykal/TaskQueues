@@ -3,9 +3,3 @@
   margin-left: 20px;
   min-width: 320px; /* Minimum reasonable width to be supported */
 }
-
-.App .topBar {
-  font-size: 2rem;
-  border-bottom: 1px solid #D4D4D5;
-  margin-bottom: 20px;
-}

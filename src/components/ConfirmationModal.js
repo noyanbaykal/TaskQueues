@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Icon } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 
 import '../styles/ConfirmationModal.css';
 
@@ -8,12 +8,12 @@ function ConfirmationModal({ prompt, onConfirm, onCancel }) {
   return (
     <div>
       {prompt}
-      <Button icon onClick={onConfirm}>
-        <Icon name='check' />
-      </Button>
-      <Button icon onClick={onCancel}>
-        <Icon name='delete' />
-      </Button>
+      <button onClick={onConfirm}>
+        <Icon className='check' />
+      </button>
+      <button onClick={onCancel}>
+        <Icon className='delete' />
+      </button>
     </div>
   );
 }

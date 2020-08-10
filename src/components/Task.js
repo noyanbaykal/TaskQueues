@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Icon } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 
 import ConfirmationModal from './ConfirmationModal';
 import TaskModal from './TaskModal.js';
@@ -67,9 +67,9 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
       {
         {
           [DISPLAY_MODES.NO_TASK]:
-            <Button icon onClick={onClickCreateOrEdit}>
-              <Icon name='plus circle' />
-            </Button>
+            <button onClick={onClickCreateOrEdit}>
+              <Icon className='plus circle' />
+            </button>
           ,[DISPLAY_MODES.EDIT_TASK]:
             <TaskModal
               taskInfo={taskInfo}
@@ -84,15 +84,15 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
               {text}
             </div>
             <div className='taskButtons'>
-              <Button icon onClick={onClickDelete}>
-                  <Icon name='trash' />
-              </Button>
-              <Button icon onClick={onClickCreateOrEdit}>
-                <Icon name='pencil alternate' />
-              </Button>
-              <Button icon onClick={onClickComplete}>
-                <Icon name='check square outline' />
-              </Button>
+              <button onClick={onClickDelete}>
+                  <Icon className='trash' />
+              </button>
+              <button onClick={onClickCreateOrEdit}>
+                <Icon className='pencil alternate' />
+              </button>
+              <button onClick={onClickComplete}>
+                <Icon className='check square outline' />
+              </button>
             </div>
           </>
           ,[DISPLAY_MODES.NEED_CONFIRMATION]:

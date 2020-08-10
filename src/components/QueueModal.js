@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Icon } from 'semantic-ui-react';
 
 import '../styles/QueueModal.css';
 
@@ -44,12 +43,12 @@ function QueueModal({ queue = {}, onConfirm, onCancel }) {
         onChange={event => setColor(event.target.value)}
         style={COLOR_INPUT_STYLE(color)}
       />
-      <Button icon onClick={() => onConfirm(confirmValues())}>
-        <Icon name='check' />
-      </Button>
-      <Button icon onClick={onCancel}>
-        <Icon name='delete' />
-      </Button>
+      <button onClick={() => onConfirm(confirmValues())}>
+        <i className='check icon'/>
+      </button>
+      <button onClick={onCancel}>
+        <i className='delete icon' />
+      </button>
     </div>
   );
 };
