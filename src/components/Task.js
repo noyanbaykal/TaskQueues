@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Icon } from 'semantic-ui-react';
 
-import ConfirmationModal from './ConfirmationModal';
 import TaskModal from './TaskModal.js';
 
 import '../styles/Task.css';
@@ -96,11 +95,7 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
             </div>
           </>
           ,[DISPLAY_MODES.NEED_CONFIRMATION]:
-            <ConfirmationModal
-              prompt={DELETE_CONFIRMATION(text, queueName)}
-              onConfirm={onDeleteConfirm}
-              onCancel={onClickCancel}
-            />
+            <div>WIP REMOVED</div>
         }[displayMode]
       }
     </div>

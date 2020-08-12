@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import '../styles/TaskModal.css';
-
 const LABEL_QUEUE_SELECT = 'Choose a Queue:';
 const LABEL_INPUT_TASK = 'Enter task';
 

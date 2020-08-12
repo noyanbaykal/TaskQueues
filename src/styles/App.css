@@ -3,3 +3,13 @@
   margin-left: 20px;
   min-width: 320px; /* Minimum reasonable width to be supported */
 }
+
+/* Semantic UI React adds 2em marginRight to icons, which is unnecessary */
+div.queueBar button > i {
+  margin: 0 0 0 0;
+}
+
+div.TaskList button > i {
+  margin: 0 0 0 0;
+}
+/* ~Semantic UI React adds 2em marginRight to icons, which is unnecessary */
