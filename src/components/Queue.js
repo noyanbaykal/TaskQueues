@@ -70,12 +70,12 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete }) {
         changes.id = id;
         handleEdit(changes);
       } else {
+        // Need to manually reset text and queueId to prevent staleness after creation.
+        setName('');
+        setColor(getRandomColor());
+
         handleCreate(changes);
       }
-
-      // Need to reset these values manually before the create button is pushed again.
-      setName(queueName || '');
-      setColor(queueColor || getRandomColor());
     }
 
     setBeforeEditValues({});

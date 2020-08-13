@@ -3,8 +3,6 @@ import React from 'react';
 import Queue from './Queue.js';
 import TaskList from './TaskList';
 
-import '../styles/QueueList.css';
-
 import useQueues from '../logic/useQueues.js';
 
 const NO_QUEUES = 'Create a queue before adding tasks!';

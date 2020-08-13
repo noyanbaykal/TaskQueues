@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 
 import Task from './Task';
 
-import '../styles/TaskList.css';
-
 const NO_TASKS = 'You have no pending tasks!';
 
 function TaskList({ taskInfos, queueDropdownOptions, actionCreateTask, actionEditTask, actionDeleteTask, actionCompleteTask }) {

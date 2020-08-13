@@ -13,3 +13,40 @@ div.TaskList button > i {
   margin: 0 0 0 0;
 }
 /* ~Semantic UI React adds 2em marginRight to icons, which is unnecessary */
+
+/* QueueList */
+.QueueList {
+  width: 100%;
+  text-align: left;
+  display: flex;
+}
+
+.QueueList .queueBar {
+  min-width: 15%;
+  max-width: 30%;
+  padding-right: 15px;
+}
+
+.QueueList .queueBar .noQueue{
+  margin: 0 auto;
+  width: 15%;
+  height: 30%;
+}
+
+.QueueList .queueBar .noQueue .createQueue{
+  margin-top: 4px;
+  margin-left: 2px;
+}
+
+.QueueList .mainPanel {
+  width: 100%;
+}
+/* ~QueueList */
+
+/* TaskList */
+.TaskList {
+  width: 100%;
+  border-left: 1px solid gray;
+  padding-left: 15px;
+}
+/* ~TaskList */
