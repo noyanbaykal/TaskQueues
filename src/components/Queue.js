@@ -2,24 +2,13 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Icon, Input, Label } from 'semantic-ui-react';
 
+import { DISPLAY_MODES, SHOULD_DISPLAY, getFontColor, getRandomColor } from '../logic/utilities';
+
 const HTML_ID_INPUT_NAME = 'name';
 const HTML_ID_INPUT_COLOR = 'color';
 const INPUT_FIELD_INFO_NAME = 'Enter queue name:';
 const INPUT_FIELD_INFO_COLOR = 'Select a color in hex format: #ffffff';
 const DELETE_CONFIRMATION = 'Are you sure you want to delete this Queue?';
-
-const DISPLAY_MODES = Object.freeze({
-  NO_QUEUE: 'noQueue',
-  EDIT_QUEUE: 'editQueue',
-  DISPLAY_QUEUE: 'Queue',
-  NEED_CONFIRMATION: 'confirmQueue',
-});
-
-const SHOULD_DISPLAY = (queue) => queue ? DISPLAY_MODES.DISPLAY_QUEUE : DISPLAY_MODES.NO_QUEUE;
-
-const getRandomColor = () => {
-  return `#${Math.floor(Math.random()*16777215).toString(16)}`;
-};
 
 // The queue will be undefined if this is the 'add queue' button instance
 function Queue({ queue, handleCreate, handleEdit, handleDelete }) {
@@ -37,11 +26,12 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete }) {
       color
     });
 
-    setDisplayMode(DISPLAY_MODES.EDIT_QUEUE);
+    setDisplayMode(DISPLAY_MODES.EDIT);
   };
 
   const onClickView = () => {
     // TODO
+    // set buttons?
   };
 
   const onClickDelete = () => {
@@ -49,7 +39,7 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete }) {
   };
 
   const onClickCancel = () => {
-    if(displayMode === DISPLAY_MODES.EDIT_QUEUE) {
+    if(displayMode === DISPLAY_MODES.EDIT) {
       setName(beforeEditValues.name);
       setColor(beforeEditValues.color);
 
@@ -82,12 +72,30 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete }) {
     setDisplayMode(SHOULD_DISPLAY(queue));
   };
 
+  const getLabelStyle = () => {
+    const fontColor = getFontColor(color);
+    const border = `1px ${fontColor === '#ffffff' ? 'outset white' : 'solid black'}`;
+
+    return {
+      backgroundColor: color,
+      color: fontColor,
+      border,
+    };
+  };
+
   const getCardContent = () => {
     return (
       <>
         <div className='ui tiny label' style={{ backgroundColor: color }}/>
+        { taskCount > 0 &&
+          <div className='ui circular label floating'
+            style={getLabelStyle()}
+          >
+            {taskCount}
+          </div>
+        }
         {
-          displayMode === DISPLAY_MODES.EDIT_QUEUE &&
+          displayMode === DISPLAY_MODES.EDIT &&
           <>
             <Label htmlFor={HTML_ID_INPUT_COLOR}>{INPUT_FIELD_INFO_COLOR}</Label>
             <Input
@@ -107,7 +115,7 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete }) {
           </>
         }
         {
-          displayMode !== DISPLAY_MODES.EDIT_QUEUE &&
+          displayMode !== DISPLAY_MODES.EDIT &&
           <Card.Content>
             <Card.Header textAlign='center' style={{ overflowWrap: 'break-word' }}>
               {name}
@@ -123,30 +131,23 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete }) {
   };
 
   const getCardExtraContent = () => {
-    if(displayMode === DISPLAY_MODES.DISPLAY_QUEUE) {
+    if(displayMode === DISPLAY_MODES.DISPLAY) {
       return (
         <Card.Content extra>
           <button className='left floated' onClick={onClickCreateOrEdit} style={{ marginRight: '0.65em' }}>
-            <i className='large edit icon' />
+            <Icon className='pencil alternate' />
           </button>
-          <button className='left floated' onClick={onClickView}>
-            <Icon className='large eye icon'/>
+          <button className='left floated' onClick={onClickDelete}>
+            <Icon className='trash' />
           </button>
-          <div className='right floated'>
-            { taskCount > 0 &&
-              <div className='ui circular label' style={{ marginRight: '0.65em' }}>
-                {taskCount}
-              </div>
-            }
-            <button onClick={onClickDelete}>
-              <Icon className='large trash icon' />
-            </button>
-          </div>
+          <button className='right floated' onClick={onClickView}>
+            <Icon className='eye'/>
+          </button>
         </Card.Content>
       );
     }
 
-    if(displayMode === DISPLAY_MODES.EDIT_QUEUE) {
+    if(displayMode === DISPLAY_MODES.EDIT) {
       return getConfirmationButtons(onModalConfirm, onClickCancel);
     }
 
@@ -171,11 +172,11 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete }) {
   }
 
   return (
-    <div className={displayMode}>
+    <div className={`Queue ${displayMode}`} style={{ textAlign: 'center' }}> {/* textAlign needed to horizontally center the plus button */}
       {
-        displayMode === DISPLAY_MODES.NO_QUEUE
+        displayMode === DISPLAY_MODES.NO_CONTENT
         ?
-          <button onClick={onClickCreateOrEdit}>
+          <button onClick={onClickCreateOrEdit} style={{ display: 'inline-block', margin: '0 auto' }}>
             <Icon className='plus circle' />
           </button>
         :

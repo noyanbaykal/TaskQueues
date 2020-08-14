@@ -2,14 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Icon, Input, Label } from 'semantic-ui-react';
 
-const DISPLAY_MODES = Object.freeze({
-  NO_TASK: 1,
-  EDIT_TASK: 2,
-  DISPLAY_TASK: 3,
-  NEED_CONFIRMATION: 4,
-});
-
-const SHOULD_DISPLAY = (taskInfo) => taskInfo ? DISPLAY_MODES.DISPLAY_TASK : DISPLAY_MODES.NO_TASK;
+import { DISPLAY_MODES, SHOULD_DISPLAY } from '../logic/utilities';
 
 const HTML_ID_INPUT_TASK = 'task';
 const HTML_ID_INPUT_QUEUE = 'queue-select';
@@ -35,7 +28,7 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
       queueId,
     });
 
-    setDisplayMode(DISPLAY_MODES.EDIT_TASK);
+    setDisplayMode(DISPLAY_MODES.EDIT);
   };
 
   const onClickDelete = () => {
@@ -43,7 +36,7 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
   };
 
   const onClickCancel = () => {
-    if(displayMode === DISPLAY_MODES.EDIT_TASK) {
+    if(displayMode === DISPLAY_MODES.EDIT) {
       setText(beforeEditValues.text);
       setQueueId(beforeEditValues.queueId);
 
@@ -91,9 +84,8 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
   const getCardContent = () => {
     return (
       <>
-        <div className='colorStripe' style={{ backgroundColor: color }}/>
         {
-          displayMode === DISPLAY_MODES.EDIT_TASK &&
+          displayMode === DISPLAY_MODES.EDIT &&
           <>
             { 
               !initialQueueId &&
@@ -118,9 +110,9 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
           </>
         }
         {
-          displayMode !== DISPLAY_MODES.EDIT_TASK &&
+          displayMode !== DISPLAY_MODES.EDIT &&
           <Card.Content>
-            <div style={{ overflowWrap: 'break-word' }}>
+            <div style={{ overflowWrap: 'break-word', textAlign: 'center' }}>
               {text}
             </div>
           </Card.Content>
@@ -134,25 +126,23 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
   };
 
   const getCardExtraContent = () => {
-    if(displayMode === DISPLAY_MODES.DISPLAY_TASK) {
+    if(displayMode === DISPLAY_MODES.DISPLAY) {
       return (
         <Card.Content extra>
           <button onClick={onClickCreateOrEdit} style={{ marginRight: '0.65em' }}>
             <Icon className='pencil alternate' />
           </button>
-          <div style={{ display: 'inline' }}>
           <button onClick={onClickDelete}>
               <Icon className='trash' />
           </button>
           <button className='right floated' onClick={onClickComplete}>
             <Icon className='check square outline' />
           </button>
-          </div>
         </Card.Content>
       );
     }
 
-    if(displayMode === DISPLAY_MODES.EDIT_TASK) {
+    if(displayMode === DISPLAY_MODES.EDIT) {
       return getConfirmationButtons(onModalConfirm, onClickCancel);
     }
 
@@ -177,15 +167,17 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
   }
 
   return (
-    <div className='Task'>
+    <div className={`Task ${displayMode}`} >
       {
-        displayMode === DISPLAY_MODES.NO_TASK
+        displayMode === DISPLAY_MODES.NO_CONTENT
         ?
-          <button onClick={onClickCreateOrEdit}>
-            <Icon className='plus circle' />
-          </button>
+          <div style={{ textAlign: 'center' }}>
+            <button onClick={onClickCreateOrEdit} style={{ display: 'inline-block', margin: '0 auto' }}>
+              <Icon className='plus circle' />
+            </button>
+          </div>
         :
-          <Card style={{ marginBottom: '1em' }}>
+          <Card style={{ marginBottom: '1em', borderLeft: `0.8em solid ${color}` }}>
             {
               getCardContent()
             }
