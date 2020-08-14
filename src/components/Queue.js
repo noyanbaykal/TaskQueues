@@ -14,7 +14,7 @@ const INPUT_FIELD_INFO_COLOR = 'Select a color in 3 or 6 digit hex format: #ffff
 const DELETE_CONFIRMATION = 'Are you sure you want to delete this Queue?';
 
 // The queue will be undefined if this is the 'add queue' button instance
-function Queue({ queue, handleCreate, handleEdit, handleDelete }) {
+function Queue({ queue, handleCreate, handleEdit, handleDelete, handleView, active }) {
   const {id, pendingTasks, name: queueName, color: queueColor} = queue || {};
   const taskCount = (pendingTasks || []).length;
 
@@ -39,8 +39,7 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete }) {
   };
 
   const onClickView = () => {
-    // TODO
-    // set buttons?
+    handleView(id);
   };
 
   const onClickDelete = () => {
@@ -212,6 +211,10 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete }) {
               getCardContent()
             }
             {
+              active &&
+                <Icon className={'eye'} style={{ paddingLeft: '0.3em', paddingBottom: '1.5em' }}/>
+            }
+            {
               getCardExtraContent()
             }
           </Card>
@@ -230,6 +233,8 @@ Queue.propTypes = {
   handleCreate: PropTypes.func.isRequired,
   handleEdit: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
+  handleView: PropTypes.func.isRequired,
+  active: PropTypes.bool,
 };
 
 export default Queue;

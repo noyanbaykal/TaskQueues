@@ -6,6 +6,8 @@ import { DISPLAY_MODES, SHOULD_DISPLAY } from '../logic/utilities';
 
 const TASK_ANIMATION_TYPE = 'jiggle';
 const TASK_ANIMATION_DURATION = 500;
+const TASK_BORDER_SIZE = '0.8em';
+const COMPLETED_TASK_OPACITY = 0.65;
 
 const HTML_ID_INPUT_TASK = 'task';
 const HTML_ID_INPUT_QUEUE = 'queue-select';
@@ -19,7 +21,7 @@ const DELETE_CONFIRMATION = (queueName) => {
 function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handleDelete, handleComplete }) {
   const [displayMode, setDisplayMode] = useState(SHOULD_DISPLAY(taskInfo));
 
-  const { queueName, queueId: initialQueueId, id, index, color, text: initialText } = taskInfo || {};
+  const { queueName, queueId: initialQueueId, id, index, color, text: initialText, completed } = taskInfo || {};
 
   const [beforeEditValues, setBeforeEditValues] = useState({});
   const [text, setText] = useState(initialText || '');
@@ -180,12 +182,24 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
     );
   }
 
+  // Semantic applies a hover effect to cards with onClick handlers set.
+  // Completed cards should not have this effect, or show any buttons.
+  const getCardOnClickValue = () => {
+    if (completed) {
+      return undefined;
+    }
+
+    return function() {
+      setShowButtons((showButtons) => !showButtons);
+    }
+  }
+
   return (
     <div className={`Task ${displayMode}`} >
       {
         displayMode === DISPLAY_MODES.NO_CONTENT
         ?
-          <div style={{ textAlign: 'center' }}>
+          <div style={{ textAlign: 'center', paddingLeft: TASK_BORDER_SIZE }}>
             <button onClick={onClickCreateOrEdit} style={{ display: 'inline-block', margin: '0 auto' }}>
               <Icon className='plus circle' />
             </button>
@@ -197,8 +211,8 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
             visible={taskCompletedTransition}
           >
             <Card
-              style={{ marginBottom: '1em', borderLeft: `0.8em solid ${color}` }}
-              onClick={() => setShowButtons((showButtons) => !showButtons)}
+              style={{ marginBottom: '1em', borderLeft: `${TASK_BORDER_SIZE} solid ${color}`, opacity: completed ? COMPLETED_TASK_OPACITY : undefined }}
+              onClick={getCardOnClickValue()}
             >
               {
                 getCardContent()

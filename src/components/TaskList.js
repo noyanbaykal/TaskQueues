@@ -51,6 +51,7 @@ TaskList.propTypes = {
       index: PropTypes.number.isRequired,
       color: PropTypes.string.isRequired,
       text: PropTypes.string.isRequired,
+      completed: PropTypes.bool,
     })
   ).isRequired,
   queueDropdownOptions: PropTypes.arrayOf(PropTypes.shape({
