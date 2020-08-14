@@ -35,17 +35,22 @@ function QueueList() {
             />
           ))
         }
+        { queues.length < 1 &&
+          <div style={{ marginBottom: '1em' }}>
+            {NO_QUEUES}
+          </div>
+        }
         <Queue
           handleCreate={actionCreateQueue}
           handleEdit={actionEditQueue}
           handleDelete={actionDeleteQueue}
         />
       </div>
-      <div className='mainPanel'>
-        {
-          queues.length < 1
-          ? <div>{NO_QUEUES}</div>
-          : <TaskList
+      {
+        queues.length > 0 &&
+          <div className='mainPanel'>
+          {
+            <TaskList
               taskInfos={getTaskInfos()}
               queueDropdownOptions={getQueueDropdownOptions()}
               actionCreateTask={actionCreateTask}
@@ -53,8 +58,9 @@ function QueueList() {
               actionDeleteTask={actionDeleteTask}
               actionCompleteTask={actionCompleteTask}
             />
-        }
-      </div>
+          }
+          </div>
+      }
     </div>
   );
 };

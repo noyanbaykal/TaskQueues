@@ -10,7 +10,9 @@ function TaskList({ taskInfos, queueDropdownOptions, actionCreateTask, actionEdi
     <div className='TaskList'>
       { 
         taskInfos.length < 1
-        ? <div>{NO_TASKS}</div>
+        ? <div style={{ marginBottom: '1em' }}>
+            {NO_TASKS}
+          </div>
         : (
           <div>
             {

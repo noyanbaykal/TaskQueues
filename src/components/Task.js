@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Card, Icon, Input, Label } from 'semantic-ui-react';
+import { Card, Icon, Input, Label, Transition } from 'semantic-ui-react';
 
 import { DISPLAY_MODES, SHOULD_DISPLAY } from '../logic/utilities';
+
+const TASK_ANIMATION_TYPE = 'jiggle';
+const TASK_ANIMATION_DURATION = 500;
 
 const HTML_ID_INPUT_TASK = 'task';
 const HTML_ID_INPUT_QUEUE = 'queue-select';
@@ -21,6 +24,8 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
   const [beforeEditValues, setBeforeEditValues] = useState({});
   const [text, setText] = useState(initialText || '');
   const [queueId, setQueueId] = useState(initialQueueId || queueDropdownOptions[0].id);
+  const [showButtons, setShowButtons] = useState(false);
+  const [taskCompletedTransition, setTaskCompletedTransition] = useState(true);
 
   const onClickCreateOrEdit = () => {
     setBeforeEditValues({
@@ -76,9 +81,13 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
   };
 
   const onClickComplete = () => {
-    setDisplayMode(SHOULD_DISPLAY(taskInfo));
+    setTaskCompletedTransition((taskCompletedTransition) => !taskCompletedTransition);
 
-    handleComplete(queueId, index);
+    setTimeout(() => {
+      setDisplayMode(SHOULD_DISPLAY(taskInfo));
+
+      handleComplete(queueId, index);
+    }, TASK_ANIMATION_DURATION);
   };
 
   const getCardContent = () => {
@@ -112,7 +121,8 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
         {
           displayMode !== DISPLAY_MODES.EDIT &&
           <Card.Content>
-            <div style={{ overflowWrap: 'break-word', textAlign: 'center' }}>
+            {/* Need to override text color after giving the card an onClick handler*/}
+            <div style={{ overflowWrap: 'break-word', textAlign: 'center', color: 'black' }}>
               {text}
             </div>
           </Card.Content>
@@ -127,6 +137,10 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
 
   const getCardExtraContent = () => {
     if(displayMode === DISPLAY_MODES.DISPLAY) {
+      if(!showButtons) {
+        return null;
+      }
+      
       return (
         <Card.Content extra>
           <button onClick={onClickCreateOrEdit} style={{ marginRight: '0.65em' }}>
@@ -177,14 +191,23 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
             </button>
           </div>
         :
-          <Card style={{ marginBottom: '1em', borderLeft: `0.8em solid ${color}` }}>
-            {
-              getCardContent()
-            }
-            {
-              getCardExtraContent()
-            }
-          </Card>
+          <Transition
+            animation={TASK_ANIMATION_TYPE}
+            duration={TASK_ANIMATION_DURATION}
+            visible={taskCompletedTransition}
+          >
+            <Card
+              style={{ marginBottom: '1em', borderLeft: `0.8em solid ${color}` }}
+              onClick={() => setShowButtons((showButtons) => !showButtons)}
+            >
+              {
+                getCardContent()
+              }
+              {
+                getCardExtraContent()
+              }
+            </Card>
+          </Transition>
       }
     </div>
   )

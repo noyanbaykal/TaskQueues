@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Card, Icon, Input, Label } from 'semantic-ui-react';
+import { Card, Icon, Input, Label, Transition } from 'semantic-ui-react';
 
 import { DISPLAY_MODES, SHOULD_DISPLAY, isHexColorString, getFontColor, getRandomColor } from '../logic/utilities';
+
+const TASK_ANIMATION_TYPE = 'flash';
+const TASK_ANIMATION_DURATION = 600;
 
 const HTML_ID_INPUT_NAME = 'name';
 const HTML_ID_INPUT_COLOR = 'color';
@@ -19,6 +22,12 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete }) {
   const [beforeEditValues, setBeforeEditValues] = useState({});
   const [name, setName] = useState(queueName || '');
   const [color, setColor] = useState(queueColor || getRandomColor());
+  const [showButtons, setShowButtons] = useState(false);
+  const [taskCountTransition, setTaskCountTransition] = useState(true);
+
+  useEffect(() => {
+    setTaskCountTransition((taskCountTransition) => !taskCountTransition);
+  }, [taskCount]);
 
   const onClickCreateOrEdit = () => {
     setBeforeEditValues({
@@ -92,11 +101,17 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete }) {
       <>
         <div className='ui tiny label' style={{ backgroundColor: color }}/>
         { taskCount > 0 &&
-          <div className='ui circular label floating'
-            style={getLabelStyle()}
+          <Transition
+            animation={TASK_ANIMATION_TYPE}
+            duration={TASK_ANIMATION_DURATION}
+            visible={taskCountTransition}
           >
-            {taskCount}
-          </div>
+            <div className='ui circular label floating'
+              style={getLabelStyle()}
+            >
+              {taskCount}
+            </div>
+          </Transition>
         }
         {
           displayMode === DISPLAY_MODES.EDIT &&
@@ -137,6 +152,10 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete }) {
 
   const getCardExtraContent = () => {
     if(displayMode === DISPLAY_MODES.DISPLAY) {
+      if(!showButtons) {
+        return null;
+      }
+
       return (
         <Card.Content extra>
           <button className='left floated' onClick={onClickCreateOrEdit} style={{ marginRight: '0.65em' }}>
@@ -185,7 +204,10 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete }) {
             <Icon className='plus circle' />
           </button>
         :
-          <Card style={{ marginBottom: '1.2em' }}>
+          <Card
+            style={{ marginBottom: '1.2em' }}
+            onClick={() => setShowButtons((showButtons) => !showButtons)}
+          >
             {
               getCardContent()
             }
