@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Icon, Input, Label } from 'semantic-ui-react';
 
-import { DISPLAY_MODES, SHOULD_DISPLAY, getFontColor, getRandomColor } from '../logic/utilities';
+import { DISPLAY_MODES, SHOULD_DISPLAY, isHexColorString, getFontColor, getRandomColor } from '../logic/utilities';
 
 const HTML_ID_INPUT_NAME = 'name';
 const HTML_ID_INPUT_COLOR = 'color';
 const INPUT_FIELD_INFO_NAME = 'Enter queue name:';
-const INPUT_FIELD_INFO_COLOR = 'Select a color in hex format: #ffffff';
+const INPUT_FIELD_INFO_COLOR = 'Select a color in 3 or 6 digit hex format: #ffffff';
 const DELETE_CONFIRMATION = 'Are you sure you want to delete this Queue?';
 
 // The queue will be undefined if this is the 'add queue' button instance
@@ -83,6 +83,10 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete }) {
     };
   };
 
+  const inputHasError = () => {
+    return !isHexColorString(color) || !name || name.length < 1;
+  }
+
   const getCardContent = () => {
     return (
       <>
@@ -104,6 +108,7 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete }) {
               title='Enter Hex formatted color string'
               value={color}
               onChange={event => setColor(event.target.value)}
+              error={isHexColorString(color) ? undefined : true}
             />
             <Label htmlFor={HTML_ID_INPUT_NAME}>{INPUT_FIELD_INFO_NAME}</Label>
             <Input
@@ -161,7 +166,7 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete }) {
   const getConfirmationButtons = (onConfirm, onCancel) => {
     return (
       <Card.Content extra>
-        <button className='left floated' onClick={onConfirm}>
+        <button className='left floated' onClick={onConfirm} disabled={inputHasError() ? true : undefined}>
           <Icon className='check' />
         </button>
         <button className='right floated' onClick={onCancel}>

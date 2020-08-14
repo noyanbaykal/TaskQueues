@@ -156,7 +156,7 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
   const getConfirmationButtons = (onConfirm, onCancel) => {
     return (
       <Card.Content extra>
-        <button className='left floated' onClick={onConfirm}>
+        <button className='left floated' onClick={onConfirm} disabled={!text || text.length < 1 ? true : undefined}>
           <Icon className='check' />
         </button>
         <button className='right floated' onClick={onCancel}>

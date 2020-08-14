@@ -9,6 +9,10 @@ export const SHOULD_DISPLAY = (content) => {
   return content ? DISPLAY_MODES.DISPLAY : DISPLAY_MODES.NO_CONTENT;
 };
 
+export const isHexColorString = (string) => {
+  return /^#([A-Fa-f0-9]{3}$)|([A-Fa-f0-9]{6}$)/.test(string);
+}
+
 const HEX_STRING_LENGTH = 7;
 const HEX = 16;
 
