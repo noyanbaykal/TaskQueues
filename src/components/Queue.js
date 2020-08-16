@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Icon, Input, Label, Transition } from 'semantic-ui-react';
 
-import { DISPLAY_MODES, SHOULD_DISPLAY, isHexColorString, getFontColor, getRandomColor } from '../logic/utilities';
+import { DISPLAY_MODES, SHOULD_DISPATCH, SHOULD_DISPLAY, isHexColorString, getFontColor, getRandomColor } from '../logic/utilities';
 
 const TASK_ANIMATION_TYPE = 'flash';
 const TASK_ANIMATION_DURATION = 600;
@@ -36,6 +36,10 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete, handleView, acti
     });
 
     setDisplayMode(DISPLAY_MODES.EDIT);
+  };
+
+  const onClickCard = () => {
+    setShowButtons((showButtons) => !showButtons);
   };
 
   const onClickView = () => {
@@ -93,7 +97,7 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete, handleView, acti
 
   const inputHasError = () => {
     return !isHexColorString(color) || !name || name.length < 1;
-  }
+  };
 
   const getCardContent = () => {
     return (
@@ -192,7 +196,19 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete, handleView, acti
         </button>
       </Card.Content>
     );
-  }
+  };
+
+  const getCardOnKeyPressHandler = () => {
+    if(displayMode === DISPLAY_MODES.DISPLAY) {
+      return function(e) {
+        if(SHOULD_DISPATCH(e.target === e.currentTarget && e.keyCode)) {
+          onClickCard();
+        }
+      };
+    }
+
+    return undefined;
+  };
 
   return (
     <div className={`Queue ${displayMode}`} style={{ textAlign: 'center' }}> {/* textAlign needed to horizontally center the plus button */}
@@ -205,7 +221,9 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete, handleView, acti
         :
           <Card
             style={{ marginBottom: '1.2em' }}
-            onClick={() => setShowButtons((showButtons) => !showButtons)}
+            onClick={onClickCard}
+            tabIndex={displayMode === DISPLAY_MODES.DISPLAY ? 0 : undefined}
+            onKeyDown={getCardOnKeyPressHandler()}
           >
             {
               getCardContent()

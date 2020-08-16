@@ -15,7 +15,7 @@ const LABEL_QUEUE_SELECT = 'Choose a Queue:';
 const LABEL_INPUT_TASK = 'Enter task';
 const DELETE_CONFIRMATION = (queueName) => {
   return `Are you sure you want to delete this task, in queue: ${queueName}?`;
-}
+};
 
 // The taskInfo will be undefined if this is the 'add queue' button instance
 function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handleDelete, handleComplete }) {
@@ -51,13 +51,13 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
     }
 
     setDisplayMode(SHOULD_DISPLAY(taskInfo));
-  }
+  };
 
   const onChangeDropdown = (event) => {
     if(queueId !== event.target.value) {
       setQueueId(event.target.value);
     }
-  }
+  };
 
   const onModalConfirm = () => {
     if(beforeEditValues.text !== text || beforeEditValues.queueId !== queueId) {
@@ -184,7 +184,7 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
         </button>
       </Card.Content>
     );
-  }
+  };
 
   // Semantic applies a hover effect to cards with onClick handlers set.
   // Completed cards should not have this effect, or show any buttons.
@@ -196,7 +196,7 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
     return function() {
       setShowButtons((showButtons) => !showButtons);
     }
-  }
+  };
 
   return (
     <div className={`Task ${displayMode}`} >

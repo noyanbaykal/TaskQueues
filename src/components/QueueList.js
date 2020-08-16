@@ -54,7 +54,7 @@ function QueueList() {
         </label>
       </div>
     );
-  }
+  };
 
   const selectedQueueId = getSelectedQueueId();
   const view = getCurrentView();

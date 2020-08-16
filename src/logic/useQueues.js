@@ -8,7 +8,7 @@ const viewModes = Object.freeze({
   topTasks: 'topTasks',
   allPendingTasks: 'allPendingTasks',
   viewQueue: 'viewQueue',
-})
+});
 
 const getItemById = (array, id) => {
   return findItem(array, 'id', id);
@@ -32,16 +32,16 @@ function useQueues() {
 
   const getCurrentView = () => {
     return view;
-  }
+  };
 
   const getShowCompletedTasks = () => {
     return showCompletedTasks;
-  }
+  };
 
   const updateQueues = (newQueues) => {
     setQueues(newQueues);
     client.setQueues(newQueues);
-  }
+  };
 
   const getTaskInfos = () => {
     switch(view) {
@@ -64,7 +64,7 @@ function useQueues() {
       text: task.text,
       completed: task.completed,
     }
-  }
+  };
 
   const getTasksFromQueue = (queueId) => {
     const taskInfos = [];
@@ -91,7 +91,7 @@ function useQueues() {
     }
 
     return taskInfos;
-  }
+  };
 
   const getTopTasksHelper = (queue, sourceArray, destinationArray,  count) => {
     if(sourceArray.length > 0) {
@@ -104,7 +104,7 @@ function useQueues() {
         destinationArray.push(initializeTaskInfo(queue, sourceArray[i]));
       }
     }
-  }
+  };
 
   const getTopTasks = (count) => {
     const taskInfos = [];
@@ -120,7 +120,7 @@ function useQueues() {
     }
 
     return taskInfos;
-  }
+  };
 
   const getQueueDropdownOptions = () => {
     return queues.map(
@@ -130,13 +130,13 @@ function useQueues() {
 
   const getSelectedQueueId = () => {
     return viewQueueId;
-  }
+  };
 
   const actionViewChange = (newView) => {
     if(view !== newView) {
       setView(newView);
     }
-  }
+  };
 
   const actionCreateQueue = ({ name, color }) => {
     const newQueue = {
@@ -166,6 +166,11 @@ function useQueues() {
 
   const actionDeleteQueue = (queueId) => {
     const newQueues = queues.filter(queue => queue.id !== queueId);
+
+    if(viewQueueId === queueId) {
+      setViewQueueId(undefined);
+      setView(viewModes.topTasks);
+    }
     
     updateQueues(newQueues);
   };
@@ -175,11 +180,11 @@ function useQueues() {
       setViewQueueId(queueId);
       setView(viewModes.viewQueue);
     } 
-  }
+  };
 
   const actionToggleShowCompletedTasks = () => {
     setShowCompletedTasks((showCompletedTasks) => !showCompletedTasks);
-  }
+  };
 
   const actionCreateTask = (queueId, text) => {
     const newQueues = [...queues];

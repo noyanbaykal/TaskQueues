@@ -12,7 +12,7 @@ function TaskList({ taskInfos, queueDropdownOptions, actionCreateTask, actionEdi
         {NO_TASKS}
       </div>
     );
-  }
+  };
 
   return (
     <div className='TaskList' style={{ marginRight: '1em' }}>
