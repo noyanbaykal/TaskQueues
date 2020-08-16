@@ -1,12 +1,17 @@
 import React from 'react';
 
-import { Icon } from 'semantic-ui-react';
-
 import Queue from './Queue.js';
 import TaskList from './TaskList';
 
 import useQueues from '../logic/useQueues.js';
 
+const VIEW_RADIO = 'viewRadio'
+const VIEW_RADIO_ID_ALL = 'viewRadioAll';
+const VIEW_RADIO_LABEL_ALL = 'All Tasks';
+const VIEW_RADIO_ID_TOP = 'viewRadioTop';
+const VIEW_RADIO_LABEL_TOP = 'Top Tasks';
+const VIEW_RADIO_ID_QUEUE = 'viewRadioQueue';
+const VIEW_RADIO_LABEL_QUEUE = 'View Queue';
 const SHOW_ALL_TASKS_ID = 'showAllTasks'
 const SHOW_ALL_TASKS_LABEL = 'Show completed tasks'
 const NO_QUEUES = 'Create a queue before adding tasks!';
@@ -33,12 +38,25 @@ function QueueList() {
     actionCompleteTask,
   } = useQueues();
 
-  /* Needed getNamedItem to read custom attribute */
-  const getCustomAttributeValue = (e) => {
-    actionViewChange(e.target.attributes.getNamedItem('value').value);
+  const getViewRadioInput = (id, label, viewMode, disabled) => {
+    return (
+      <div>
+        <input type="radio" name={VIEW_RADIO}
+          id={id}
+          value={viewMode}
+          style={{ marginRight: '0.3em' }}
+          onChange={(e) => actionViewChange(e.target.value)}
+          checked={view === viewMode}
+          disabled={disabled}
+        />
+        <label htmlFor={id} style={{ marginRight: '1em' }}>
+          {label}
+        </label>
+      </div>
+    );
   }
 
-  const queueIdSelected = getSelectedQueueId() !== undefined;
+  const selectedQueueId = getSelectedQueueId();
   const view = getCurrentView();
 
   return (
@@ -53,7 +71,7 @@ function QueueList() {
               handleEdit={actionEditQueue}
               handleDelete={actionDeleteQueue}
               handleView={actionViewQueue}
-              active={getSelectedQueueId() === queue.id ? true : undefined}
+              active={selectedQueueId === queue.id ? true : undefined}
             />
           ))
         }
@@ -71,44 +89,26 @@ function QueueList() {
         />
       </div>
       <div className='mainPanel'>
-        <div className='controls' style={{ marginBottom: SMALL_OFFSET }}>
-          <div style={{ display: 'inline', marginRight: '0.5em' }}>
-            <Icon
-              className={`circular close`}
-              style={{ border: `1px solid blue` }}
-              onClick={getCustomAttributeValue}
-              value={viewModes.allPendingTasks}
-            />
-            <Icon
-              className={`circular step forward`}
-              style={{ border: `1px solid red`, marginLeft: '1em', marginRight: '1em' }}
-              onClick={getCustomAttributeValue}
-              value={viewModes.topTasks}
-            />
-            <div style={{ display: 'inline' }}>
-              <Icon
-                className={`circular plus`}
-                style={{ border: `1px solid yellow` }}
-                onClick={getCustomAttributeValue}
-                value={viewModes.viewQueue}
-                disabled={!queueIdSelected}
-              />
-              {
-                viewModes.viewQueue === view &&
-                  <>
-                    <input
-                      id={SHOW_ALL_TASKS_ID}
-                      type='checkbox'
-                      onChange={actionToggleShowCompletedTasks}
-                      style={{ marginLeft: '0.5em', marginRight: '0.3em' }}
-                      checked={getShowCompletedTasks()}
-                    />
-                    <label htmlFor={SHOW_ALL_TASKS_ID}>{SHOW_ALL_TASKS_LABEL}</label>
-                  </>
-              }
+        {
+          queues.length > 0 &&
+            <div className='controls' style={{ marginBottom: SMALL_OFFSET, display: 'flex' }}>
+              <div style={{ marginRight: '0.5em' }}>
+                { getViewRadioInput(VIEW_RADIO_ID_TOP, VIEW_RADIO_LABEL_TOP, viewModes.topTasks) }
+                { getViewRadioInput(VIEW_RADIO_ID_ALL, VIEW_RADIO_LABEL_ALL, viewModes.allPendingTasks) }
+                { getViewRadioInput(VIEW_RADIO_ID_QUEUE, VIEW_RADIO_LABEL_QUEUE, viewModes.viewQueue, selectedQueueId === undefined) }
               </div>
-          </div>
-        </div>
+              <div >
+                <input
+                    id={SHOW_ALL_TASKS_ID}
+                    type='checkbox'
+                    onChange={actionToggleShowCompletedTasks}
+                    style={{ marginLeft: '0.5em', marginRight: '0.3em' }}
+                    checked={getShowCompletedTasks()}
+                  />
+                <label htmlFor={SHOW_ALL_TASKS_ID}>{SHOW_ALL_TASKS_LABEL}</label>
+              </div>
+            </div>
+        }
         {
           queues.length > 0 &&
             <TaskList

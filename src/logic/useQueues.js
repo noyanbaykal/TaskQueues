@@ -5,13 +5,13 @@ import { findItem } from './utilities';
 import { client } from '../Client';
 
 const viewModes = Object.freeze({
-  allPendingTasks: 'allPendingTasks',
   topTasks: 'topTasks',
+  allPendingTasks: 'allPendingTasks',
   viewQueue: 'viewQueue',
 })
 
-const getQueue = (queues, queueId) => {
-  return findItem(queues, 'id', queueId);
+const getItemById = (array, id) => {
+  return findItem(array, 'id', id);
 };
 
 function useQueues() {
@@ -21,7 +21,13 @@ function useQueues() {
   const [showCompletedTasks, setShowCompletedTasks] = useState(false);
 
   useEffect(() => {
-    client.getQueues().then(savedQueues => setQueues(savedQueues));
+    client.getQueues().then((savedQueues) => {
+      if(savedQueues.length > 0) {
+        setViewQueueId(savedQueues[0].id);
+      }
+
+      setQueues(savedQueues);
+    });
   }, []);
 
   const getCurrentView = () => {
@@ -49,43 +55,55 @@ function useQueues() {
     }
   };
 
-  const initializeTaskInfo = (queue, task, index, completed) => {
+  const initializeTaskInfo = (queue, task) => {
     return {
       queueName: queue.name,
       queueId: queue.id,
       id: task.id,
-      index: index,
       color: queue.color,
       text: task.text,
-      completed
+      completed: task.completed,
     }
   }
 
   const getTasksFromQueue = (queueId) => {
     const taskInfos = [];
 
-    const queue = getQueue(queues, queueId);
+    const queue = getItemById(queues, queueId);
     if(!queue) {
       return taskInfos;
     }
 
     if(queue.pendingTasks.length > 0) {
       taskInfos.push(
-        ...queue.pendingTasks.map((task, index) => {
-          return initializeTaskInfo(queue, task, index);
+        ...queue.pendingTasks.map((task) => {
+          return initializeTaskInfo(queue, task);
         })
       );
     }
 
     if(showCompletedTasks && queue.completedTasks.length > 0) {
       taskInfos.push(
-        ...queue.completedTasks.map((task, index) => {
-          return initializeTaskInfo(queue, task, index, true);
+        ...queue.completedTasks.map((task) => {
+          return initializeTaskInfo(queue, task);
         })
       );
     }
 
     return taskInfos;
+  }
+
+  const getTopTasksHelper = (queue, sourceArray, destinationArray,  count) => {
+    if(sourceArray.length > 0) {
+      let endIndex = sourceArray.length;
+      if(count && count < endIndex) {
+        endIndex = count;
+      }
+
+      for(let i = 0; i < endIndex; i++) {
+        destinationArray.push(initializeTaskInfo(queue, sourceArray[i]));
+      }
+    }
   }
 
   const getTopTasks = (count) => {
@@ -94,15 +112,10 @@ function useQueues() {
     for(let i = 0; i < queues.length; i++) {
       const queue = queues[i];
 
-      if(queue.pendingTasks.length > 0) {
-        let endIndex = queue.pendingTasks.length;
-        if(count && count < endIndex) {
-          endIndex = count;
-        }
-
-        for(let j = 0; j < endIndex; j++) {
-          taskInfos.push(initializeTaskInfo(queue, queue.pendingTasks[j], j));
-        }
+      getTopTasksHelper(queue, queue.pendingTasks, taskInfos, count);
+      
+      if(showCompletedTasks) {
+        getTopTasksHelper(queue, queue.completedTasks, taskInfos, count);
       }
     }
 
@@ -171,7 +184,7 @@ function useQueues() {
   const actionCreateTask = (queueId, text) => {
     const newQueues = [...queues];
 
-    const queue = getQueue(newQueues, queueId);
+    const queue = getItemById(newQueues, queueId);
     if(queue) {
       const task = {
         id: uuidv4(),
@@ -184,42 +197,48 @@ function useQueues() {
     }
   };
   
-  const actionEditTask = (queueId, taskIndex, newText) => {
+  const actionEditTask = (queueId, taskId, newText) => {
     const newQueues = [...queues];
 
-    const queue = getQueue(newQueues, queueId);
+    const queue = getItemById(newQueues, queueId);
     if(queue) {
-      queue.pendingTasks[taskIndex].text = newText;
-
-      updateQueues(newQueues);
-    }
-  };
-
-  const resetView = () => {
-    setView(viewModes.topTasks);
-    setViewQueueId(undefined);
-  };
-  
-  const actionDeleteTask = (queueId, taskIndex) => {
-    const newQueues = [...queues];
-
-    const queue = getQueue(newQueues, queueId);
-    if(queue) {
-      queue.pendingTasks.splice(taskIndex, 1);
+      const task = getItemById(queue.pendingTasks, taskId);
+      task.text = newText;
 
       updateQueues(newQueues);
     }
   };
   
-  const actionCompleteTask = (queueId, taskIndex) => {
+  const actionDeleteTask = (queueId, taskId) => {
     const newQueues = [...queues];
 
-    const queue = getQueue(newQueues, queueId);
+    const queue = getItemById(newQueues, queueId);
     if(queue) {
-      const completedTask = queue.pendingTasks.splice(taskIndex, 1);
-      queue.completedTasks.push(completedTask[0]);
+      queue.pendingTasks = queue.pendingTasks.filter(task => task.id !== taskId);
 
       updateQueues(newQueues);
+    }
+  };
+  
+  const actionCompleteTask = (queueId, taskId) => {
+    const newQueues = [...queues];
+
+    let taskIndex;
+    const queue = getItemById(newQueues, queueId);
+    if(queue) {
+      for(let i = 0; i < queue.pendingTasks.length; i++) {
+        if(queue.pendingTasks[i].id === taskId) {
+          taskIndex = i;
+          break;
+        }
+      }
+      if(taskIndex !== undefined) {
+        const [completedTask] = queue.pendingTasks.splice(taskIndex, 1);
+        completedTask.completed = true;
+
+        queue.completedTasks.unshift(completedTask);
+        updateQueues(newQueues);
+      }
     }
   };
 

@@ -21,7 +21,7 @@ const DELETE_CONFIRMATION = (queueName) => {
 function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handleDelete, handleComplete }) {
   const [displayMode, setDisplayMode] = useState(SHOULD_DISPLAY(taskInfo));
 
-  const { queueName, queueId: initialQueueId, id, index, color, text: initialText, completed } = taskInfo || {};
+  const { queueName, queueId: initialQueueId, id, color, text: initialText, completed } = taskInfo || {};
 
   const [beforeEditValues, setBeforeEditValues] = useState({});
   const [text, setText] = useState(initialText || '');
@@ -62,7 +62,7 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
   const onModalConfirm = () => {
     if(beforeEditValues.text !== text || beforeEditValues.queueId !== queueId) {
       if(id) {
-        handleEdit(queueId, index, text);
+        handleEdit(queueId, id, text);
       } else {
         // Need to manually reset text and queueId to prevent staleness after creation.
         setText('');
@@ -79,7 +79,7 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
   const onDeleteConfirm = () => {
     setDisplayMode(SHOULD_DISPLAY(taskInfo));
 
-    handleDelete(queueId, index);
+    handleDelete(queueId, id);
   };
 
   const onClickComplete = () => {
@@ -88,7 +88,7 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
     setTimeout(() => {
       setDisplayMode(SHOULD_DISPLAY(taskInfo));
 
-      handleComplete(queueId, index);
+      handleComplete(queueId, id);
     }, TASK_ANIMATION_DURATION);
   };
 
@@ -122,12 +122,16 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
         }
         {
           displayMode !== DISPLAY_MODES.EDIT &&
-          <Card.Content>
-            {/* Need to override text color after giving the card an onClick handler*/}
-            <div style={{ overflowWrap: 'break-word', textAlign: 'center', color: 'black' }}>
-              {text}
-            </div>
-          </Card.Content>
+            <Card.Content>
+              {/* Need to override text color after giving the card an onClick handler*/}
+              <div style={{ overflowWrap: 'break-word', textAlign: 'center', color: 'black' }}>
+                {text}
+                {
+                  completed &&
+                    <Icon className='right floated green check'></Icon>
+                }
+              </div>
+            </Card.Content>
         }
         {
           displayMode === DISPLAY_MODES.NEED_CONFIRMATION &&
@@ -232,9 +236,9 @@ Task.propTypes = {
     queueName: PropTypes.string.isRequired,
     queueId: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
-    index: PropTypes.number.isRequired,
     color: PropTypes.string.isRequired,
     text: PropTypes.string.isRequired,
+    completed: PropTypes.bool,
   }),
   queueDropdownOptions: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string.isRequired,

@@ -6,15 +6,28 @@ import Task from './Task';
 const NO_TASKS = 'You have no pending tasks!';
 
 function TaskList({ taskInfos, queueDropdownOptions, actionCreateTask, actionEditTask, actionDeleteTask, actionCompleteTask }) {
+  const getNoTasksMessage = () => {
+    return (
+      <div style={{ marginBottom: '1em' }}>
+        {NO_TASKS}
+      </div>
+    );
+  }
+
   return (
-    <div className='TaskList'>
+    <div className='TaskList' style={{ marginRight: '1em' }}>
       { 
         taskInfos.length < 1
-        ? <div style={{ marginBottom: '1em' }}>
-            {NO_TASKS}
-          </div>
+        ? 
+          <>
+            { getNoTasksMessage() }
+          </>
         : (
           <div>
+            { 
+              taskInfos[0].completed &&
+                getNoTasksMessage()
+            }
             {
               taskInfos.map((taskInfo) => (
                 <Task
@@ -48,7 +61,6 @@ TaskList.propTypes = {
       queueName: PropTypes.string.isRequired,
       queueId: PropTypes.string.isRequired,
       id: PropTypes.string.isRequired,
-      index: PropTypes.number.isRequired,
       color: PropTypes.string.isRequired,
       text: PropTypes.string.isRequired,
       completed: PropTypes.bool,
