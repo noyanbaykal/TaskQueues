@@ -1,0 +1,32 @@
+.App {
+  margin-top: 5px;
+  margin-left: 20px;
+  min-width: 320px; /* Minimum reasonable width to be supported */
+}
+
+/* Semantic UI React adds 2em marginRight to icons, which is unnecessary */
+div.queueBar button > i {
+  margin: 0 0 0 0;
+}
+
+div.TaskList button > i {
+  margin: 0 0 0 0;
+}
+/* ~Semantic UI React adds 2em marginRight to icons, which is unnecessary */
+
+/* QueueList */
+.QueueList {
+  display: flex;
+}
+
+.QueueList .queueBar {
+  padding-right: 3em;
+}
+/* ~QueueList & Queue */
+
+/* TaskList */
+.TaskList {
+  border-left: 1px solid gray;
+  padding-left: 3em;
+}
+/* ~TaskList & Task */
