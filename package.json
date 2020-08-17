@@ -1,6 +1,6 @@
 {
   "name": "task-queues",
-  "homepage": "https://noyanbaykal.github.io/taskQueues",
+  "homepage": "https://noyanbaykal.github.io/TaskQueues",
   "version": "0.1.0",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
