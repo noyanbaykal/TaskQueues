@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/taskQueues/static/css/main.05a09f2b.chunk.css",
+    "main.js": "/taskQueues/static/js/main.b991a71b.chunk.js",
+    "main.js.map": "/taskQueues/static/js/main.b991a71b.chunk.js.map",
+    "runtime-main.js": "/taskQueues/static/js/runtime-main.9e46408f.js",
+    "runtime-main.js.map": "/taskQueues/static/js/runtime-main.9e46408f.js.map",
+    "static/css/2.1265f8cd.chunk.css": "/taskQueues/static/css/2.1265f8cd.chunk.css",
+    "static/js/2.d5d9fbcc.chunk.js": "/taskQueues/static/js/2.d5d9fbcc.chunk.js",
+    "static/js/2.d5d9fbcc.chunk.js.map": "/taskQueues/static/js/2.d5d9fbcc.chunk.js.map",
+    "index.html": "/taskQueues/index.html",
+    "precache-manifest.14f142eda31d5e476fa0ce74f2f0166c.js": "/taskQueues/precache-manifest.14f142eda31d5e476fa0ce74f2f0166c.js",
+    "service-worker.js": "/taskQueues/service-worker.js",
+    "static/css/2.1265f8cd.chunk.css.map": "/taskQueues/static/css/2.1265f8cd.chunk.css.map",
+    "static/css/main.05a09f2b.chunk.css.map": "/taskQueues/static/css/main.05a09f2b.chunk.css.map",
+    "static/js/2.d5d9fbcc.chunk.js.LICENSE.txt": "/taskQueues/static/js/2.d5d9fbcc.chunk.js.LICENSE.txt",
+    "static/media/semantic.min.css": "/taskQueues/static/media/outline-icons.ef60a4f6.woff"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.9e46408f.js",
+    "static/css/2.1265f8cd.chunk.css",
+    "static/js/2.d5d9fbcc.chunk.js",
+    "static/css/main.05a09f2b.chunk.css",
+    "static/js/main.b991a71b.chunk.js"
+  ]
+}
