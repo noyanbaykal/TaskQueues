@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Icon, Input, Label, Transition } from 'semantic-ui-react';
 
+import { CreateButton } from '../logic/itemCard';
 import { DISPLAY_MODES, SHOULD_DISPLAY } from '../logic/utilities';
 
 const TASK_ANIMATION_TYPE = 'jiggle';
@@ -203,11 +204,7 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
       {
         displayMode === DISPLAY_MODES.NO_CONTENT
         ?
-          <div style={{ textAlign: 'center', paddingLeft: TASK_BORDER_SIZE }}>
-            <button onClick={onClickCreateOrEdit} style={{ display: 'inline-block', margin: '0 auto' }}>
-              <Icon className='plus circle' />
-            </button>
-          </div>
+          <CreateButton onCreate={onClickCreateOrEdit}/>
         :
           <Transition
             animation={TASK_ANIMATION_TYPE}

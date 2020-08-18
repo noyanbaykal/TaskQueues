@@ -3,19 +3,20 @@ import PropTypes from 'prop-types';
 
 import Task from './Task';
 
+const SMALL_OFFSET = '1em';
 const NO_TASKS = 'You have no pending tasks!';
 
 function TaskList({ taskInfos, queueDropdownOptions, actionCreateTask, actionEditTask, actionDeleteTask, actionCompleteTask }) {
   const getNoTasksMessage = () => {
     return (
-      <div style={{ marginBottom: '1em' }}>
+      <div style={{ marginBottom: SMALL_OFFSET }}>
         {NO_TASKS}
       </div>
     );
   };
 
   return (
-    <div className='TaskList' style={{ marginRight: '1em' }}>
+    <div className='TaskList'>
       { 
         taskInfos.length < 1
         ? 

@@ -1,32 +1,26 @@
 .App {
   margin-top: 5px;
   margin-left: 20px;
-  min-width: 320px; /* Minimum reasonable width to be supported */
+  --semantic-button-margin: 0 0 0 0;
+  --semantic-button-border-top: 2px outset rgb(118, 118, 118);
 }
 
 /* Semantic UI React adds 2em marginRight to icons, which is unnecessary */
-div.queueBar button > i {
-  margin: 0 0 0 0;
+div.QueueList button > i {
+  margin: var(--semantic-button-margin);
 }
 
 div.TaskList button > i {
-  margin: 0 0 0 0;
+  margin: var(--semantic-button-margin);
 }
 /* ~Semantic UI React adds 2em marginRight to icons, which is unnecessary */
 
-/* QueueList */
-.QueueList {
-  display: flex;
+/* Semantic UI React removes the top border of buttons in cards, which is unnecessary */
+div.QueueList div.Queue.noContent .card button {
+  border-top: var(--semantic-button-border-top) !important;
 }
 
-.QueueList .queueBar {
-  padding-right: 3em;
+div.TaskList div.Task.noContent .card button {
+  border-top: var(--semantic-button-border-top) !important;
 }
-/* ~QueueList & Queue */
-
-/* TaskList */
-.TaskList {
-  border-left: 1px solid gray;
-  padding-left: 3em;
-}
-/* ~TaskList & Task */
+/* ~Semantic UI React removes the top border of buttons in cards, which is unnecessary */
