@@ -1,4 +1,5 @@
 import React from 'react';
+import { Grid } from 'semantic-ui-react';
 
 import Queue from './Queue.js';
 import TaskList from './TaskList';
@@ -60,68 +61,74 @@ function QueueList() {
   const view = getCurrentView();
 
   return (
-    <div className='QueueList'>
-      <div className='queueBar'>
-        {
-          queues.map((queue) => (
+    <Grid className='QueueList' columns={2} divided>
+      <Grid.Row>
+        <Grid.Column>
+          <div className='queueBar'>
+            {
+              queues.map((queue) => (
+                <Queue
+                  key={queue.id}
+                  queue={queue}
+                  handleCreate={actionCreateQueue}
+                  handleEdit={actionEditQueue}
+                  handleDelete={actionDeleteQueue}
+                  handleView={actionViewQueue}
+                  active={selectedQueueId === queue.id ? true : undefined}
+                />
+              ))
+            }
+            { 
+              queues.length < 1 &&
+                <div style={{ marginBottom: SMALL_OFFSET }}>
+                  {NO_QUEUES}
+                </div>
+            }
             <Queue
-              key={queue.id}
-              queue={queue}
               handleCreate={actionCreateQueue}
               handleEdit={actionEditQueue}
               handleDelete={actionDeleteQueue}
               handleView={actionViewQueue}
-              active={selectedQueueId === queue.id ? true : undefined}
             />
-          ))
-        }
-        { 
-          queues.length < 1 &&
-            <div style={{ marginBottom: SMALL_OFFSET }}>
-              {NO_QUEUES}
-            </div>
-        }
-        <Queue
-          handleCreate={actionCreateQueue}
-          handleEdit={actionEditQueue}
-          handleDelete={actionDeleteQueue}
-          handleView={actionViewQueue}
-        />
-      </div>
-      <div className='mainPanel'>
-        {
-          queues.length > 0 &&
-            <div className='controls' style={{ marginBottom: SMALL_OFFSET, display: 'flex' }}>
-              <div style={{ marginRight: '0.5em' }}>
-                { getViewRadioInput(VIEW_RADIO_ID_TOP, VIEW_RADIO_LABEL_TOP, viewModes.topTasks) }
-                { getViewRadioInput(VIEW_RADIO_ID_ALL, VIEW_RADIO_LABEL_ALL, viewModes.allPendingTasks) }
-                { getViewRadioInput(VIEW_RADIO_ID_QUEUE, VIEW_RADIO_LABEL_QUEUE, viewModes.viewQueue, selectedQueueId === undefined) }
-              </div>
-              <div >
-                <input
-                    id={SHOW_ALL_TASKS_ID}
-                    type='checkbox'
-                    onChange={actionToggleShowCompletedTasks}
-                    style={{ marginLeft: '0.5em', marginRight: '0.3em' }}
-                    checked={getShowCompletedTasks()}
-                  />
-                <label htmlFor={SHOW_ALL_TASKS_ID}>{SHOW_ALL_TASKS_LABEL}</label>
-              </div>
-            </div>
-        }
-        {
-          queues.length > 0 &&
-            <TaskList
-              taskInfos={getTaskInfos()}
-              queueDropdownOptions={getQueueDropdownOptions()}
-              actionCreateTask={actionCreateTask}
-              actionEditTask={actionEditTask}
-              actionDeleteTask={actionDeleteTask}
-              actionCompleteTask={actionCompleteTask}
-            />
-        }
-      </div>
-    </div>
+          </div>
+        </Grid.Column>
+        <Grid.Column>
+          <div className='mainPanel'>
+            {
+              queues.length > 0 &&
+                <div className='controls' style={{ marginBottom: SMALL_OFFSET, display: 'flex' }}>
+                  <div style={{ marginRight: '0.5em' }}>
+                    { getViewRadioInput(VIEW_RADIO_ID_TOP, VIEW_RADIO_LABEL_TOP, viewModes.topTasks) }
+                    { getViewRadioInput(VIEW_RADIO_ID_ALL, VIEW_RADIO_LABEL_ALL, viewModes.allPendingTasks) }
+                    { getViewRadioInput(VIEW_RADIO_ID_QUEUE, VIEW_RADIO_LABEL_QUEUE, viewModes.viewQueue, selectedQueueId === undefined) }
+                  </div>
+                  <div >
+                    <input
+                        id={SHOW_ALL_TASKS_ID}
+                        type='checkbox'
+                        onChange={actionToggleShowCompletedTasks}
+                        style={{ marginLeft: '0.5em', marginRight: '0.3em' }}
+                        checked={getShowCompletedTasks()}
+                      />
+                    <label htmlFor={SHOW_ALL_TASKS_ID}>{SHOW_ALL_TASKS_LABEL}</label>
+                  </div>
+                </div>
+            }
+            {
+              queues.length > 0 &&
+                <TaskList
+                  taskInfos={getTaskInfos()}
+                  queueDropdownOptions={getQueueDropdownOptions()}
+                  actionCreateTask={actionCreateTask}
+                  actionEditTask={actionEditTask}
+                  actionDeleteTask={actionDeleteTask}
+                  actionCompleteTask={actionCompleteTask}
+                />
+            }
+          </div>
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
   );
 };
 

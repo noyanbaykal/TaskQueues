@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Icon, Input, Label, Transition } from 'semantic-ui-react';
 
+import { CreateButton } from '../logic/itemCard';
 import { DISPLAY_MODES, SHOULD_DISPATCH, SHOULD_DISPLAY, isHexColorString, getFontColor, getRandomColor } from '../logic/utilities';
 
 const TASK_ANIMATION_TYPE = 'flash';
@@ -211,13 +212,11 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete, handleView, acti
   };
 
   return (
-    <div className={`Queue ${displayMode}`} style={{ textAlign: 'center' }}> {/* textAlign needed to horizontally center the plus button */}
+    <div className={`Queue ${displayMode}`}>
       {
         displayMode === DISPLAY_MODES.NO_CONTENT
         ?
-          <button onClick={onClickCreateOrEdit} style={{ display: 'inline-block', margin: '0 auto' }}>
-            <Icon className='plus circle' />
-          </button>
+          <CreateButton onCreate={onClickCreateOrEdit}/>
         :
           <Card
             style={{ marginBottom: '1.2em' }}
