@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Icon, Label, Transition } from 'semantic-ui-react';
 
-function CreateButton({ onCreate }) {
+function CreateButton({ onCreate, ariaLabel }) {
   const BACKGROUND_COLOR = 'rgb(239, 239, 239)';
   const BACKGROUND_COLOR_HOVERED = 'rgb(210, 210, 210)';
 
@@ -11,6 +11,7 @@ function CreateButton({ onCreate }) {
   return (
     <Card style={{ textAlign: 'center', boxShadow: 'none'}}>
       <button
+        aria-label={ariaLabel}
         onClick={onCreate}
         style={{ margin: '0 auto', backgroundColor: color }}
         onMouseEnter={() => setColor(BACKGROUND_COLOR_HOVERED)}
@@ -40,18 +41,32 @@ const SHOULD_DISPLAY = (content) => {
   return content ? DISPLAY_MODES.DISPLAY : DISPLAY_MODES.NO_CONTENT;
 };
 
-const getCardDisplayButtons = (editFunction, deleteFunction, specialButtonIcon, handleSpecial) => {
+const getCardDisplayButtons = (editFunction, deleteFunction, specialButtonIcon, handleSpecial, ariaLabelIdentifier, specialButtonLabel) => {
+  const EDIT_ARIA_LABEL = `${ariaLabelIdentifier}: Edit`;
+  const DELETE_ARIA_LABEL = `${ariaLabelIdentifier}: Delete`;
+
   return (
     <Card.Content extra>
-      <button onClick={editFunction} style={{ marginRight: '0.65em' }}>
+      <button
+        aria-label={EDIT_ARIA_LABEL}
+        onClick={editFunction}
+        style={{ marginRight: '0.65em' }}
+      >
         <Icon className='pencil alternate' />
       </button>
-      <button onClick={deleteFunction}>
+      <button
+        aria-label={DELETE_ARIA_LABEL}
+        onClick={deleteFunction}
+      >
         <Icon className='trash' />
       </button>
       {
         handleSpecial &&
-          <button className='right floated' onClick={handleSpecial}>
+          <button
+            aria-label={`${ariaLabelIdentifier}: ${specialButtonLabel}`}
+            className='right floated'
+            onClick={handleSpecial}
+          >
             <Icon className={specialButtonIcon}/>
           </button>
       }
@@ -59,13 +74,25 @@ const getCardDisplayButtons = (editFunction, deleteFunction, specialButtonIcon, 
   );
 };
 
-const getConfirmationButtons = (onConfirm, onCancel, confirmDisabled) => {
+const getConfirmationButtons = (onConfirm, onCancel, confirmDisabled, ariaLabelIdentifier) => {
+  const CONFIRM_ARIA_LABEL = `${ariaLabelIdentifier}: Confirm`;
+  const CANCEL_ARIA_LABEL = `${ariaLabelIdentifier}: Cancel`;
+
   return (
     <Card.Content extra>
-      <button className='left floated' onClick={onConfirm} disabled={confirmDisabled}>
+      <button
+        aria-label={CONFIRM_ARIA_LABEL}
+        className='left floated'
+        onClick={onConfirm}
+        disabled={confirmDisabled}
+      >
         <Icon className='check' />
       </button>
-      <button className='right floated' onClick={onCancel}>
+      <button
+        aria-label={CANCEL_ARIA_LABEL}
+        className='right floated'
+        onClick={onCancel}
+      >
         <Icon className='delete' />
       </button>
     </Card.Content>
@@ -74,10 +101,13 @@ const getConfirmationButtons = (onConfirm, onCancel, confirmDisabled) => {
 
 function CrudCard(props) {
   const {
-    children, content, componentName, cardTransition, getCardContent, getEditContent, getDisplayContent, DELETE_LABEL, cardStyle,
-    specialButtonIcon, specialButtonFunction, specialButtonAfterFunction, confirmDisabled, storeBeforeInput, resetAfterInput,
-    deleteHandler, modalHandler, enableClick, enableKeyboardClick,
+    children, content, componentName, ariaLabelIdentifier, cardTransition, getCardContent, getEditContent, getDisplayContent,
+    deleteLabel, cardStyle, specialButtonIcon, specialButtonFunction, specialButtonAfterFunction, specialButtonLabel,
+    confirmDisabled, storeBeforeInput, resetAfterInput, deleteHandler, modalHandler, enableClick, enableKeyboardClick,
   } = props;
+
+  const LABEL_CREATE = `Create ${componentName}`;
+  const LABEL_TOGGLE_BUTTONS = `${ariaLabelIdentifier}: Toggle Buttons`;
 
   const [displayMode, setDisplayMode] = useState(SHOULD_DISPLAY(content));
   const [showButtons, setShowButtons] = useState(false);
@@ -151,7 +181,7 @@ function CrudCard(props) {
         }
         {
           displayMode === DISPLAY_MODES.NEED_CONFIRMATION &&
-            <Label>{ DELETE_LABEL }</Label>
+            <Label>{ deleteLabel }</Label>
         }
       </>
     );
@@ -163,15 +193,15 @@ function CrudCard(props) {
         return null;
       }
       
-      return getCardDisplayButtons(onClickCreateOrEdit, onClickDelete, specialButtonIcon, handleSpecial);
+      return getCardDisplayButtons(onClickCreateOrEdit, onClickDelete, specialButtonIcon, handleSpecial, ariaLabelIdentifier, specialButtonLabel);
     }
   
     if(displayMode === DISPLAY_MODES.EDIT) {
-      return getConfirmationButtons(handleConfirm, handleCancel, confirmDisabled);
+      return getConfirmationButtons(handleConfirm, handleCancel, confirmDisabled, ariaLabelIdentifier);
     }
   
     if(displayMode === DISPLAY_MODES.NEED_CONFIRMATION) {
-      return getConfirmationButtons(handleDelete, handleCancel);
+      return getConfirmationButtons(handleDelete, handleCancel, undefined, ariaLabelIdentifier);
     }
   
     return null;
@@ -208,6 +238,8 @@ function CrudCard(props) {
   const getCard = () => {
     return (
       <Card
+        aria-label={LABEL_TOGGLE_BUTTONS}
+        role={'button'}
         style={cardStyle}
         onClick={getOnClick()}
         tabIndex={enableClick && enableKeyboardClick && displayMode === DISPLAY_MODES.DISPLAY ? 0 : undefined}
@@ -243,7 +275,7 @@ function CrudCard(props) {
       {
         displayMode === DISPLAY_MODES.NO_CONTENT
         ?
-          <CreateButton onCreate={onClickCreateOrEdit}/>
+          <CreateButton onCreate={onClickCreateOrEdit} ariaLabel={LABEL_CREATE}/>
         :
           showContent()
       }
@@ -255,6 +287,7 @@ CrudCard.propTypes = {
   children: PropTypes.node,
   content: PropTypes.object,
   componentName: PropTypes.string.isRequired,
+  ariaLabelIdentifier: PropTypes.string,
   cardTransition: PropTypes.shape({
     type: PropTypes.string.isRequired,
     duration: PropTypes.number.isRequired,
@@ -263,11 +296,12 @@ CrudCard.propTypes = {
   getCardContent: PropTypes.func,
   getEditContent: PropTypes.func.isRequired,
   getDisplayContent: PropTypes.func.isRequired,
-  DELETE_LABEL: PropTypes.string.isRequired,
+  deleteLabel: PropTypes.string.isRequired,
   cardStyle: PropTypes.object,
   specialButtonIcon: PropTypes.string,
   specialButtonFunction: PropTypes.func,
   specialButtonAfterFunction: PropTypes.func,
+  specialButtonLabel: PropTypes.string,
   confirmDisabled: PropTypes.bool,
   storeBeforeInput: PropTypes.func.isRequired,
   resetAfterInput: PropTypes.func.isRequired,

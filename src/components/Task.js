@@ -22,12 +22,13 @@ const HTML_ID_INPUT_TASK = 'task';
 const HTML_ID_INPUT_QUEUE = 'queue-select';
 const LABEL_QUEUE_SELECT = 'Choose a Queue:';
 const LABEL_INPUT_TASK = 'Enter task';
+const LABEL_COMPLETE= 'Complete';
 const DELETE_CONFIRMATION = (queueName) => {
   return `Are you sure you want to delete this task, in queue: ${queueName}?`;
 };
 
 // The taskInfo will be undefined if this is the 'add queue' button instance
-function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handleDelete, handleComplete }) {
+function Task({ taskInfo, index, queueDropdownOptions, handleCreate, handleEdit, handleDelete, handleComplete }) {
   const { queueName, queueId: initialQueueId, id, color, text: initialText, completed } = taskInfo || {};
 
   const [beforeEditValues, setBeforeEditValues] = useState({});
@@ -139,14 +140,16 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
     <CrudCard
       content={taskInfo}
       componentName={TASK_NAME}
+      ariaLabelIdentifier={`${TASK_NAME} ${index}`}
       cardTransition={cardTransition}
       getEditContent={getEditContent}
       getDisplayContent={getDisplayContent}
-      DELETE_LABEL={DELETE_CONFIRMATION(queueName)}
+      deleteLabel={DELETE_CONFIRMATION(queueName)}
       cardStyle={CARD_STYLE(color, completed)}
       specialButtonIcon={COMPLETE_TASK_ICON}
       specialButtonFunction={onClickComplete}
       specialButtonAfterFunction={afterClickComplete}
+      specialButtonLabel={LABEL_COMPLETE}
       confirmDisabled={hasValidText() ? true : undefined}
       storeBeforeInput={storeBeforeInput}
       resetAfterInput={resetAfterInput}
@@ -168,6 +171,7 @@ Task.propTypes = {
     text: PropTypes.string.isRequired,
     completed: PropTypes.bool,
   }),
+  index: PropTypes.number,
   queueDropdownOptions: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,

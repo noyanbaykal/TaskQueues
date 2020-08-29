@@ -11,6 +11,7 @@ const CARD_STYLE = { marginBottom: '1.2em' };
 
 const QUEUE_NAME = 'Queue';
 const VIEW_QUEUE_ICON = 'eye';
+const LABEL_VIEW = 'View';
 const HTML_ID_INPUT_NAME = 'name';
 const HTML_ID_INPUT_COLOR = 'color';
 const INPUT_FIELD_INFO_NAME = 'Enter queue name:';
@@ -145,13 +146,15 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete, handleView, acti
     <CrudCard
       content={queue}
       componentName={QUEUE_NAME}
+      ariaLabelIdentifier={(queue || {}).name}
       getCardContent={getCardContent}
       getEditContent={getEditContent}
       getDisplayContent={getDisplayContent}
-      DELETE_LABEL={DELETE_CONFIRMATION}
+      deleteLabel={DELETE_CONFIRMATION}
       cardStyle={CARD_STYLE}
       specialButtonIcon={VIEW_QUEUE_ICON}
       specialButtonFunction={onClickView}
+      specialButtonLabel={LABEL_VIEW}
       confirmDisabled={inputHasError() ? true : undefined}
       storeBeforeInput={storeBeforeInput}
       resetAfterInput={resetAfterInput}

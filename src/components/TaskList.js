@@ -30,10 +30,11 @@ function TaskList({ taskInfos, queueDropdownOptions, actionCreateTask, actionEdi
                 getNoTasksMessage()
             }
             {
-              taskInfos.map((taskInfo) => (
+              taskInfos.map((taskInfo, index) => (
                 <Task
                   key={`${taskInfo.id}`}
                   taskInfo={taskInfo}
+                  index={index + 1}
                   queueDropdownOptions={queueDropdownOptions}
                   handleCreate={actionCreateTask}
                   handleEdit={actionEditTask}
