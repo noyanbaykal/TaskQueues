@@ -4,19 +4,20 @@ import { Card, Icon, Input, Label, Transition } from 'semantic-ui-react';
 
 import CrudCard from './CrudCard';
 import { isHexColorString, getFontColor, getRandomColor } from '../logic/utilities';
+import { getLabelInputName, getLabelInputColor, getLabelDeleteConfirmation } from '../locales/english';
 
 const TASK_ANIMATION_TYPE = 'flash';
 const TASK_ANIMATION_DURATION = 600;
 const CARD_STYLE = { marginBottom: '1.2em' };
 
-const QUEUE_NAME = 'Queue';
+export const QUEUE_NAME = 'Queue';
 const VIEW_QUEUE_ICON = 'eye';
 const LABEL_VIEW = 'View';
 const HTML_ID_INPUT_NAME = 'name';
 const HTML_ID_INPUT_COLOR = 'color';
-const INPUT_FIELD_INFO_NAME = 'Enter queue name:';
-const INPUT_FIELD_INFO_COLOR = 'Select a color in 3 or 6 digit hex format: #ffffff';
-const DELETE_CONFIRMATION = `Are you sure you want to delete this ${QUEUE_NAME}?`;
+const INPUT_FIELD_INFO_NAME = getLabelInputName(QUEUE_NAME);
+const INPUT_FIELD_INFO_COLOR = getLabelInputColor();
+const DELETE_CONFIRMATION = getLabelDeleteConfirmation(QUEUE_NAME);
 
 // The queue will be undefined if this is the 'add queue' button instance
 function Queue({ queue, handleCreate, handleEdit, handleDelete, handleView, active }) {

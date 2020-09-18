@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Icon, Label, Transition } from 'semantic-ui-react';
 
+import { getLabelCreate, getLabelToggleButtons } from '../locales/english';
+
 function CreateButton({ onCreate, ariaLabel }) {
   const BACKGROUND_COLOR = 'rgb(239, 239, 239)';
   const BACKGROUND_COLOR_HOVERED = 'rgb(210, 210, 210)';
@@ -106,8 +108,8 @@ function CrudCard(props) {
     confirmDisabled, storeBeforeInput, resetAfterInput, deleteHandler, modalHandler, enableClick, enableKeyboardClick,
   } = props;
 
-  const LABEL_CREATE = `Create ${componentName}`;
-  const LABEL_TOGGLE_BUTTONS = `${ariaLabelIdentifier}: Toggle Buttons`;
+  const LABEL_CREATE = getLabelCreate(componentName);
+  const LABEL_TOGGLE_BUTTONS = getLabelToggleButtons(ariaLabelIdentifier);
 
   const [displayMode, setDisplayMode] = useState(SHOULD_DISPLAY(content));
   const [showButtons, setShowButtons] = useState(false);

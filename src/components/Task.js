@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { Card, Icon, Input, Label } from 'semantic-ui-react';
 
 import CrudCard from './CrudCard';
+import { getLabelSelectParent, getLabelInputType, getLabelDeleteConfirmationWithParentType } from '../locales/english';
 
-const TASK_NAME = 'Task';
+export const TASK_NAME = 'Task';
 const COMPLETE_TASK_ICON = 'check square outline';
 const TASK_ANIMATION_TYPE = 'jiggle';
 const TASK_ANIMATION_DURATION = 500;
@@ -20,16 +21,15 @@ const CARD_STYLE = (color, completed) => {
 
 const HTML_ID_INPUT_TASK = 'task';
 const HTML_ID_INPUT_QUEUE = 'queue-select';
-const LABEL_QUEUE_SELECT = 'Choose a Queue:';
-const LABEL_INPUT_TASK = 'Enter task';
-const LABEL_COMPLETE= 'Complete';
-const DELETE_CONFIRMATION = (queueName) => {
-  return `Are you sure you want to delete this task, in queue: ${queueName}?`;
-};
+const LABEL_COMPLETE = 'Complete';
 
 // The taskInfo will be undefined if this is the 'add queue' button instance
-function Task({ taskInfo, index, queueDropdownOptions, handleCreate, handleEdit, handleDelete, handleComplete }) {
+function Task({ taskInfo, index, queueDropdownOptions, handleCreate, handleEdit, handleDelete, handleComplete, parentObjectName }) {
   const { queueName, queueId: initialQueueId, id, color, text: initialText, completed } = taskInfo || {};
+
+  const LABEL_SELECT_PARENT = getLabelSelectParent(parentObjectName);
+  const LABEL_INPUT_TASK = getLabelInputType(TASK_NAME);
+  const DELETE_CONFIRMATION = getLabelDeleteConfirmationWithParentType(TASK_NAME, parentObjectName, queueName)
 
   const [beforeEditValues, setBeforeEditValues] = useState({});
   const [text, setText] = useState(initialText || '');
@@ -100,7 +100,7 @@ function Task({ taskInfo, index, queueDropdownOptions, handleCreate, handleEdit,
         { 
           !initialQueueId &&
             <>
-              <Label htmlFor={HTML_ID_INPUT_QUEUE}>{LABEL_QUEUE_SELECT}</Label>
+              <Label htmlFor={HTML_ID_INPUT_QUEUE}>{LABEL_SELECT_PARENT}</Label>
               <select id={HTML_ID_INPUT_QUEUE} onChange={onChangeDropdown}>
                 {
                   queueDropdownOptions.map((queue) =>
@@ -144,7 +144,7 @@ function Task({ taskInfo, index, queueDropdownOptions, handleCreate, handleEdit,
       cardTransition={cardTransition}
       getEditContent={getEditContent}
       getDisplayContent={getDisplayContent}
-      deleteLabel={DELETE_CONFIRMATION(queueName)}
+      deleteLabel={DELETE_CONFIRMATION}
       cardStyle={CARD_STYLE(color, completed)}
       specialButtonIcon={COMPLETE_TASK_ICON}
       specialButtonFunction={onClickComplete}
@@ -180,6 +180,7 @@ Task.propTypes = {
   handleEdit: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
   handleComplete: PropTypes.func.isRequired,
+  parentObjectName: PropTypes.string.isRequired,
 };
 
 export default Task;
