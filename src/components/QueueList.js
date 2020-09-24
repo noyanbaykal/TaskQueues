@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid } from 'semantic-ui-react';
 
-import Queue, { QUEUE_NAME } from './Queue.js';
+import Queue, { QUEUE_COMPONENT_NAME } from './Queue.js';
 import { TASK_NAME } from './Task.js';
 import TaskList from './TaskList';
 
@@ -15,10 +15,10 @@ const VIEW_RADIO_LABEL_TOP = getLabelRadioTop(TASK_NAME);
 const VIEW_RADIO_ID_ALL = 'viewRadioAll';
 const VIEW_RADIO_LABEL_ALL = getLabelRadioAll(TASK_NAME);
 const VIEW_RADIO_ID_QUEUE = 'viewRadioQueue';
-const VIEW_RADIO_LABEL_QUEUE = getLabelRadioView(QUEUE_NAME);
+const VIEW_RADIO_LABEL_QUEUE = getLabelRadioView(QUEUE_COMPONENT_NAME);
 const SHOW_ALL_TASKS_ID = 'showAllTasks'
 const SHOW_ALL_TASKS_LABEL = getLabelShowCompleted(TASK_NAME);
-const NO_QUEUES = getLabelCantCreate(QUEUE_NAME, TASK_NAME);
+const NO_QUEUES = getLabelCantCreate(QUEUE_COMPONENT_NAME, TASK_NAME);
 
 
 function QueueList() {
@@ -121,7 +121,7 @@ function QueueList() {
               queues.length > 0 &&
                 <TaskList
                   taskInfos={getTaskInfos()}
-                  parentObjectName={QUEUE_NAME}
+                  parentObjectName={QUEUE_COMPONENT_NAME}
                   queueDropdownOptions={getQueueDropdownOptions()}
                   actionCreateTask={actionCreateTask}
                   actionEditTask={actionEditTask}

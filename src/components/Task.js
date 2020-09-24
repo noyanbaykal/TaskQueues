@@ -6,6 +6,7 @@ import CrudCard from './CrudCard';
 import { getLabelSelectParent, getLabelInputType, getLabelDeleteConfirmationWithParentType } from '../locales/english';
 
 export const TASK_NAME = 'Task';
+export const NEW_TASK_ARIA_LABEL = `New ${TASK_NAME}`;
 const COMPLETE_TASK_ICON = 'check square outline';
 const TASK_ANIMATION_TYPE = 'jiggle';
 const TASK_ANIMATION_DURATION = 500;
@@ -29,7 +30,7 @@ function Task({ taskInfo, index, queueDropdownOptions, handleCreate, handleEdit,
 
   const LABEL_SELECT_PARENT = getLabelSelectParent(parentObjectName);
   const LABEL_INPUT_TASK = getLabelInputType(TASK_NAME);
-  const DELETE_CONFIRMATION = getLabelDeleteConfirmationWithParentType(TASK_NAME, parentObjectName, queueName)
+  const DELETE_CONFIRMATION = getLabelDeleteConfirmationWithParentType(TASK_NAME, parentObjectName, queueName, index)
 
   const [beforeEditValues, setBeforeEditValues] = useState({});
   const [text, setText] = useState(initialText || '');
@@ -140,7 +141,7 @@ function Task({ taskInfo, index, queueDropdownOptions, handleCreate, handleEdit,
     <CrudCard
       content={taskInfo}
       componentName={TASK_NAME}
-      ariaLabelIdentifier={`${TASK_NAME} ${index}`}
+      ariaLabelIdentifier={index ? `${TASK_NAME} ${index}` : NEW_TASK_ARIA_LABEL}
       cardTransition={cardTransition}
       getEditContent={getEditContent}
       getDisplayContent={getDisplayContent}

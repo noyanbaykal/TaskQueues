@@ -4,6 +4,15 @@ import { Card, Icon, Label, Transition } from 'semantic-ui-react';
 
 import { getLabelCreate, getLabelToggleButtons } from '../locales/english';
 
+export const GET_BUTTON_ARIA_LABEL = (ariaLabel, buttonLabel) => {
+  return `${ariaLabel}: ${buttonLabel}`;
+};
+
+export const ARIA_LABEL_CONFIRM = 'Confirm';
+export const ARIA_LABEL_CANCEL = 'Cancel';
+export const ARIA_LABEL_EDIT = 'Edit';
+export const ARIA_LABEL_DELETE = 'Delete';
+
 function CreateButton({ onCreate, ariaLabel }) {
   const BACKGROUND_COLOR = 'rgb(239, 239, 239)';
   const BACKGROUND_COLOR_HOVERED = 'rgb(210, 210, 210)';
@@ -44,20 +53,17 @@ const SHOULD_DISPLAY = (content) => {
 };
 
 const getCardDisplayButtons = (editFunction, deleteFunction, specialButtonIcon, handleSpecial, ariaLabelIdentifier, specialButtonLabel) => {
-  const EDIT_ARIA_LABEL = `${ariaLabelIdentifier}: Edit`;
-  const DELETE_ARIA_LABEL = `${ariaLabelIdentifier}: Delete`;
-
   return (
     <Card.Content extra>
       <button
-        aria-label={EDIT_ARIA_LABEL}
+        aria-label={GET_BUTTON_ARIA_LABEL(ariaLabelIdentifier, ARIA_LABEL_EDIT)}
         onClick={editFunction}
         style={{ marginRight: '0.65em' }}
       >
         <Icon className='pencil alternate' />
       </button>
       <button
-        aria-label={DELETE_ARIA_LABEL}
+        aria-label={GET_BUTTON_ARIA_LABEL(ariaLabelIdentifier, ARIA_LABEL_DELETE)}
         onClick={deleteFunction}
       >
         <Icon className='trash' />
@@ -65,7 +71,7 @@ const getCardDisplayButtons = (editFunction, deleteFunction, specialButtonIcon, 
       {
         handleSpecial &&
           <button
-            aria-label={`${ariaLabelIdentifier}: ${specialButtonLabel}`}
+            aria-label={GET_BUTTON_ARIA_LABEL(ariaLabelIdentifier, specialButtonLabel)}
             className='right floated'
             onClick={handleSpecial}
           >
@@ -77,13 +83,10 @@ const getCardDisplayButtons = (editFunction, deleteFunction, specialButtonIcon, 
 };
 
 const getConfirmationButtons = (onConfirm, onCancel, confirmDisabled, ariaLabelIdentifier) => {
-  const CONFIRM_ARIA_LABEL = `${ariaLabelIdentifier}: Confirm`;
-  const CANCEL_ARIA_LABEL = `${ariaLabelIdentifier}: Cancel`;
-
   return (
     <Card.Content extra>
       <button
-        aria-label={CONFIRM_ARIA_LABEL}
+        aria-label={GET_BUTTON_ARIA_LABEL(ariaLabelIdentifier, ARIA_LABEL_CONFIRM)}
         className='left floated'
         onClick={onConfirm}
         disabled={confirmDisabled}
@@ -91,7 +94,7 @@ const getConfirmationButtons = (onConfirm, onCancel, confirmDisabled, ariaLabelI
         <Icon className='check' />
       </button>
       <button
-        aria-label={CANCEL_ARIA_LABEL}
+        aria-label={GET_BUTTON_ARIA_LABEL(ariaLabelIdentifier, ARIA_LABEL_CANCEL)}
         className='right floated'
         onClick={onCancel}
       >

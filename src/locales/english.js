@@ -23,8 +23,8 @@ export const getLabelInputColor = () => {
   return 'Select a color in 3 or 6 digit hex format: #ffffff';
 };
 
-export const getLabelDeleteConfirmation = (componentType) => {
-  return `Are you sure you want to delete this ${componentType}?`;
+export const getLabelDeleteConfirmation = (componentType, name) => {
+  return `Are you sure you want to delete the ${componentType}: ${name}?`;
 }; 
 // ~Queue
 
@@ -37,8 +37,8 @@ export const getLabelInputType = (objectType) => {
   return `Enter ${objectType}`;
 };
 
-export const getLabelDeleteConfirmationWithParentType = (objectType, parentObjectType, parentName) => {
-  return `Are you sure you want to delete this ${objectType}, in ${parentObjectType}: ${parentName}?`;
+export const getLabelDeleteConfirmationWithParentType = (objectType, parentObjectType, parentName, index) => {
+  return `Are you sure you want to delete this ${objectType}, current index: ${index}, in ${parentObjectType}: ${parentName}?`;
 };
 // ~Task
 

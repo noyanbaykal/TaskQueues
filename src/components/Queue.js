@@ -10,14 +10,14 @@ const TASK_ANIMATION_TYPE = 'flash';
 const TASK_ANIMATION_DURATION = 600;
 const CARD_STYLE = { marginBottom: '1.2em' };
 
-export const QUEUE_NAME = 'Queue';
+export const QUEUE_COMPONENT_NAME = 'Queue';
+export const NEW_QUEUE_ARIA_LABEL = `New ${QUEUE_COMPONENT_NAME}`;
 const VIEW_QUEUE_ICON = 'eye';
 const LABEL_VIEW = 'View';
 const HTML_ID_INPUT_NAME = 'name';
 const HTML_ID_INPUT_COLOR = 'color';
-const INPUT_FIELD_INFO_NAME = getLabelInputName(QUEUE_NAME);
+const INPUT_FIELD_INFO_NAME = getLabelInputName(QUEUE_COMPONENT_NAME);
 const INPUT_FIELD_INFO_COLOR = getLabelInputColor();
-const DELETE_CONFIRMATION = getLabelDeleteConfirmation(QUEUE_NAME);
 
 // The queue will be undefined if this is the 'add queue' button instance
 function Queue({ queue, handleCreate, handleEdit, handleDelete, handleView, active }) {
@@ -146,12 +146,12 @@ function Queue({ queue, handleCreate, handleEdit, handleDelete, handleView, acti
   return (
     <CrudCard
       content={queue}
-      componentName={QUEUE_NAME}
-      ariaLabelIdentifier={(queue || {}).name}
+      componentName={QUEUE_COMPONENT_NAME}
+      ariaLabelIdentifier={queue ? queue.name : NEW_QUEUE_ARIA_LABEL}
       getCardContent={getCardContent}
       getEditContent={getEditContent}
       getDisplayContent={getDisplayContent}
-      deleteLabel={DELETE_CONFIRMATION}
+      deleteLabel={getLabelDeleteConfirmation(QUEUE_COMPONENT_NAME, name)}
       cardStyle={CARD_STYLE}
       specialButtonIcon={VIEW_QUEUE_ICON}
       specialButtonFunction={onClickView}
