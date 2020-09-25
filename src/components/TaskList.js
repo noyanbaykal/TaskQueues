@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Task from './Task';
+import Task, { TASK_NAME } from './Task';
+
+import { getLabelNoPendingObjects } from '../locales/english';
 
 const SMALL_OFFSET = '1em';
-const NO_TASKS = 'You have no pending tasks!';
+const NO_TASKS = getLabelNoPendingObjects(TASK_NAME);
 
-function TaskList({ taskInfos, queueDropdownOptions, actionCreateTask, actionEditTask, actionDeleteTask, actionCompleteTask }) {
+function TaskList({ taskInfos, parentObjectName, queueDropdownOptions, actionCreateTask, actionEditTask, actionDeleteTask, actionCompleteTask }) {
   const getNoTasksMessage = () => {
     return (
       <div style={{ marginBottom: SMALL_OFFSET }}>
@@ -30,15 +32,17 @@ function TaskList({ taskInfos, queueDropdownOptions, actionCreateTask, actionEdi
                 getNoTasksMessage()
             }
             {
-              taskInfos.map((taskInfo) => (
+              taskInfos.map((taskInfo, index) => (
                 <Task
                   key={`${taskInfo.id}`}
                   taskInfo={taskInfo}
+                  index={index + 1}
                   queueDropdownOptions={queueDropdownOptions}
                   handleCreate={actionCreateTask}
                   handleEdit={actionEditTask}
                   handleDelete={actionDeleteTask}
                   handleComplete={actionCompleteTask}
+                  parentObjectName={parentObjectName}
                 />
               ))
             }
@@ -51,6 +55,7 @@ function TaskList({ taskInfos, queueDropdownOptions, actionCreateTask, actionEdi
         handleEdit={actionEditTask}
         handleDelete={actionDeleteTask}
         handleComplete={actionCompleteTask}
+        parentObjectName={parentObjectName}
       />
     </div>
   );
@@ -67,6 +72,7 @@ TaskList.propTypes = {
       completed: PropTypes.bool,
     })
   ).isRequired,
+  parentObjectName: PropTypes.string.isRequired,
   queueDropdownOptions: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,

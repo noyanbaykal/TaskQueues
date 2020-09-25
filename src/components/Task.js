@@ -1,57 +1,60 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Card, Icon, Input, Label, Transition } from 'semantic-ui-react';
+import { Card, Icon, Input, Label } from 'semantic-ui-react';
 
-import { CreateButton } from '../logic/itemCard';
-import { DISPLAY_MODES, SHOULD_DISPLAY } from '../logic/utilities';
+import CrudCard from './CrudCard';
+import { getLabelSelectParent, getLabelInputType, getLabelDeleteConfirmationWithParentType } from '../locales/english';
 
+export const TASK_NAME = 'Task';
+export const NEW_TASK_ARIA_LABEL = `New ${TASK_NAME}`;
+const COMPLETE_TASK_ICON = 'check square outline';
 const TASK_ANIMATION_TYPE = 'jiggle';
 const TASK_ANIMATION_DURATION = 500;
 const TASK_BORDER_SIZE = '0.8em';
 const COMPLETED_TASK_OPACITY = 0.65;
+const CARD_STYLE = (color, completed) => {
+  return {
+    marginBottom: '1em',
+    borderLeft: `${TASK_BORDER_SIZE} solid ${color}`,
+    opacity: completed ? COMPLETED_TASK_OPACITY : undefined,
+  };
+};
 
 const HTML_ID_INPUT_TASK = 'task';
 const HTML_ID_INPUT_QUEUE = 'queue-select';
-const LABEL_QUEUE_SELECT = 'Choose a Queue:';
-const LABEL_INPUT_TASK = 'Enter task';
-const DELETE_CONFIRMATION = (queueName) => {
-  return `Are you sure you want to delete this task, in queue: ${queueName}?`;
-};
+const LABEL_COMPLETE = 'Complete';
 
 // The taskInfo will be undefined if this is the 'add queue' button instance
-function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handleDelete, handleComplete }) {
-  const [displayMode, setDisplayMode] = useState(SHOULD_DISPLAY(taskInfo));
-
+function Task({ taskInfo, index, queueDropdownOptions, handleCreate, handleEdit, handleDelete, handleComplete, parentObjectName }) {
   const { queueName, queueId: initialQueueId, id, color, text: initialText, completed } = taskInfo || {};
+
+  const LABEL_SELECT_PARENT = getLabelSelectParent(parentObjectName);
+  const LABEL_INPUT_TASK = getLabelInputType(TASK_NAME);
+  const DELETE_CONFIRMATION = getLabelDeleteConfirmationWithParentType(TASK_NAME, parentObjectName, queueName, index)
 
   const [beforeEditValues, setBeforeEditValues] = useState({});
   const [text, setText] = useState(initialText || '');
   const [queueId, setQueueId] = useState(initialQueueId || queueDropdownOptions[0].id);
-  const [showButtons, setShowButtons] = useState(false);
   const [taskCompletedTransition, setTaskCompletedTransition] = useState(true);
 
-  const onClickCreateOrEdit = () => {
+  const cardTransition = {
+    type: TASK_ANIMATION_TYPE,
+    duration: TASK_ANIMATION_DURATION,
+    visible: taskCompletedTransition,
+  };
+
+  const storeBeforeInput = () => {
     setBeforeEditValues({
       text,
       queueId,
     });
-
-    setDisplayMode(DISPLAY_MODES.EDIT);
   };
 
-  const onClickDelete = () => {
-    setDisplayMode(DISPLAY_MODES.NEED_CONFIRMATION);
-  };
+  const resetAfterInput = () => {
+    setText(beforeEditValues.text);
+    setQueueId(beforeEditValues.queueId);
 
-  const onClickCancel = () => {
-    if(displayMode === DISPLAY_MODES.EDIT) {
-      setText(beforeEditValues.text);
-      setQueueId(beforeEditValues.queueId);
-
-      setBeforeEditValues({});
-    }
-
-    setDisplayMode(SHOULD_DISPLAY(taskInfo));
+    setBeforeEditValues({});
   };
 
   const onChangeDropdown = (event) => {
@@ -60,171 +63,103 @@ function Task({ taskInfo, queueDropdownOptions, handleCreate, handleEdit, handle
     }
   };
 
+  const hasValidText = () => {
+    return !text || text.length < 1;
+  }
+
   const onModalConfirm = () => {
     if(beforeEditValues.text !== text || beforeEditValues.queueId !== queueId) {
       if(id) {
         handleEdit(queueId, id, text);
       } else {
-        // Need to manually reset text and queueId to prevent staleness after creation.
+        handleCreate(queueId, text);
+
+        // Need to manually update values to prevent staleness after creation.
         setText('');
         setQueueId(queueDropdownOptions[0].id);
-
-        handleCreate(queueId, text);
       }
-    }
 
-    setBeforeEditValues({});
-    setDisplayMode(SHOULD_DISPLAY(taskInfo));
+      setBeforeEditValues({});
+    }
   };
 
   const onDeleteConfirm = () => {
-    setDisplayMode(SHOULD_DISPLAY(taskInfo));
-
     handleDelete(queueId, id);
   };
 
   const onClickComplete = () => {
     setTaskCompletedTransition((taskCompletedTransition) => !taskCompletedTransition);
-
-    setTimeout(() => {
-      setDisplayMode(SHOULD_DISPLAY(taskInfo));
-
-      handleComplete(queueId, id);
-    }, TASK_ANIMATION_DURATION);
   };
 
-  const getCardContent = () => {
+  const afterClickComplete = () => {
+    handleComplete(queueId, id);
+  };
+
+  const getEditContent = () => {
     return (
       <>
-        {
-          displayMode === DISPLAY_MODES.EDIT &&
-          <>
-            { 
-              !initialQueueId &&
-                <>
-                  <Label htmlFor={HTML_ID_INPUT_QUEUE}>{LABEL_QUEUE_SELECT}</Label>
-                  <select id={HTML_ID_INPUT_QUEUE} onChange={onChangeDropdown}>
-                    {
-                      queueDropdownOptions.map((queue) =>
-                        <option key={queue.id} value={queue.id}>{queue.name}</option>
-                      )
-                    }
-                  </select>
-                </>
-            }
-            <Label htmlFor={HTML_ID_INPUT_TASK}>{LABEL_INPUT_TASK}</Label>
-            <Input
-              id={HTML_ID_INPUT_TASK}
-              type='text'
-              value={text}
-              onChange={event => setText(event.target.value)}
-            />
-          </>
-        }
-        {
-          displayMode !== DISPLAY_MODES.EDIT &&
-            <Card.Content>
-              {/* Need to override text color after giving the card an onClick handler*/}
-              <div style={{ overflowWrap: 'break-word', textAlign: 'center', color: 'black' }}>
-                {text}
+        { 
+          !initialQueueId &&
+            <>
+              <Label htmlFor={HTML_ID_INPUT_QUEUE}>{LABEL_SELECT_PARENT}</Label>
+              <select id={HTML_ID_INPUT_QUEUE} onChange={onChangeDropdown}>
                 {
-                  completed &&
-                    <Icon className='right floated green check'></Icon>
+                  queueDropdownOptions.map((queue) =>
+                    <option key={queue.id} value={queue.id}>{queue.name}</option>
+                  )
                 }
-              </div>
-            </Card.Content>
+              </select>
+            </>
         }
-        {
-          displayMode === DISPLAY_MODES.NEED_CONFIRMATION &&
-            <Label>{DELETE_CONFIRMATION(queueName)}</Label>
-        }
+        <Label htmlFor={HTML_ID_INPUT_TASK}>{LABEL_INPUT_TASK}</Label>
+        <Input
+          id={HTML_ID_INPUT_TASK}
+          type='text'
+          value={text}
+          onChange={event => setText(event.target.value)}
+        />
       </>
     );
-  };
+  }
 
-  const getCardExtraContent = () => {
-    if(displayMode === DISPLAY_MODES.DISPLAY) {
-      if(!showButtons) {
-        return null;
-      }
-      
-      return (
-        <Card.Content extra>
-          <button onClick={onClickCreateOrEdit} style={{ marginRight: '0.65em' }}>
-            <Icon className='pencil alternate' />
-          </button>
-          <button onClick={onClickDelete}>
-              <Icon className='trash' />
-          </button>
-          <button className='right floated' onClick={onClickComplete}>
-            <Icon className='check square outline' />
-          </button>
-        </Card.Content>
-      );
-    }
-
-    if(displayMode === DISPLAY_MODES.EDIT) {
-      return getConfirmationButtons(onModalConfirm, onClickCancel);
-    }
-
-    if(displayMode === DISPLAY_MODES.NEED_CONFIRMATION) {
-      return getConfirmationButtons(onDeleteConfirm, onClickCancel);
-    }
-
-    return null;
-  };
-
-  const getConfirmationButtons = (onConfirm, onCancel) => {
+  const getDisplayContent = () => {
     return (
-      <Card.Content extra>
-        <button className='left floated' onClick={onConfirm} disabled={!text || text.length < 1 ? true : undefined}>
-          <Icon className='check' />
-        </button>
-        <button className='right floated' onClick={onCancel}>
-          <Icon className='delete' />
-        </button>
+      <Card.Content>
+        {/* Need to override text color after giving the card an onClick handler*/}
+        <div style={{ overflowWrap: 'break-word', textAlign: 'center', color: 'black' }}>
+          {text}
+          {
+            completed &&
+              <Icon className='right floated green check'></Icon>
+          }
+        </div>
       </Card.Content>
     );
   };
 
-  // Semantic applies a hover effect to cards with onClick handlers set.
-  // Completed cards should not have this effect, or show any buttons.
-  const getCardOnClickValue = () => {
-    if (completed) {
-      return undefined;
-    }
-
-    return function() {
-      setShowButtons((showButtons) => !showButtons);
-    }
-  };
-
   return (
-    <div className={`Task ${displayMode}`} >
-      {
-        displayMode === DISPLAY_MODES.NO_CONTENT
-        ?
-          <CreateButton onCreate={onClickCreateOrEdit}/>
-        :
-          <Transition
-            animation={TASK_ANIMATION_TYPE}
-            duration={TASK_ANIMATION_DURATION}
-            visible={taskCompletedTransition}
-          >
-            <Card
-              style={{ marginBottom: '1em', borderLeft: `${TASK_BORDER_SIZE} solid ${color}`, opacity: completed ? COMPLETED_TASK_OPACITY : undefined }}
-              onClick={getCardOnClickValue()}
-            >
-              {
-                getCardContent()
-              }
-              {
-                getCardExtraContent()
-              }
-            </Card>
-          </Transition>
-      }
-    </div>
+    <CrudCard
+      content={taskInfo}
+      componentName={TASK_NAME}
+      ariaLabelIdentifier={index ? `${TASK_NAME} ${index}` : NEW_TASK_ARIA_LABEL}
+      cardTransition={cardTransition}
+      getEditContent={getEditContent}
+      getDisplayContent={getDisplayContent}
+      deleteLabel={DELETE_CONFIRMATION}
+      cardStyle={CARD_STYLE(color, completed)}
+      specialButtonIcon={COMPLETE_TASK_ICON}
+      specialButtonFunction={onClickComplete}
+      specialButtonAfterFunction={afterClickComplete}
+      specialButtonLabel={LABEL_COMPLETE}
+      confirmDisabled={hasValidText() ? true : undefined}
+      storeBeforeInput={storeBeforeInput}
+      resetAfterInput={resetAfterInput}
+      deleteHandler={onDeleteConfirm}
+      modalHandler={onModalConfirm}
+      enableClick={!completed}
+      enableKeyboardClick={true}
+    >
+    </CrudCard>
   )
 };
 
@@ -237,6 +172,7 @@ Task.propTypes = {
     text: PropTypes.string.isRequired,
     completed: PropTypes.bool,
   }),
+  index: PropTypes.number,
   queueDropdownOptions: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
@@ -245,6 +181,7 @@ Task.propTypes = {
   handleEdit: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
   handleComplete: PropTypes.func.isRequired,
+  parentObjectName: PropTypes.string.isRequired,
 };
 
 export default Task;

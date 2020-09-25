@@ -1,21 +1,3 @@
-const KEY_CODE_ENTER = 13;
-const KEY_CODE_SPACE = 32;
-
-export const SHOULD_DISPATCH = (keyCode) => {
-  return keyCode === KEY_CODE_ENTER || keyCode === KEY_CODE_SPACE;
-};
-
-export const DISPLAY_MODES = Object.freeze({
-  NO_CONTENT: 'noContent',
-  EDIT: 'edit',
-  DISPLAY: 'display',
-  NEED_CONFIRMATION: 'needConfirmation',
-});
-
-export const SHOULD_DISPLAY = (content) => {
-  return content ? DISPLAY_MODES.DISPLAY : DISPLAY_MODES.NO_CONTENT;
-};
-
 export const isHexColorString = (string) => {
   return /^#([A-Fa-f0-9]{3}$)|([A-Fa-f0-9]{6}$)/.test(string);
 };
